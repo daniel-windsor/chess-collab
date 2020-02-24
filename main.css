@@ -1,9 +1,9 @@
 :root {
   --black-square: #25282A;
-  --black-piece: #2C3D40;
+  --black-piece: #3F5350;
   --white-square: #E2D7B9;
   --white-piece: #D2A662;
-  --main-color: #3F5350;
+  --main-color: #2C3D40;
   --text-color: #B4AE87
 }
 
@@ -32,6 +32,10 @@ body {
 .cell {
   width: 85px;
   height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 70px;
 }
 
 .white {

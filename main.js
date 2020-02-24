@@ -16,10 +16,10 @@ function generateBoard() {
 
   for (let i = 0; i < 64; i++) {
     board.cells.push({})
-    board.cells[i].row = i % 8
-    board.cells[i].col = Math.floor(i / 8)
+    board.cells[i].row = Math.floor(i / 8)
+    board.cells[i].col = i % 8
 
-    if ((i + board.cells[i].col) % 2 == 0) {
+    if ((i + board.cells[i].row) % 2 == 0) {
       board.cells[i].color = "white";
     } else {
       board.cells[i].color = "black";
@@ -32,6 +32,7 @@ function generateBoard() {
 function cellsToNodes(boardNode, cell) {
   const node = document.createElement('div');
   node.classList.add('cell')
+  node.classList.add(`${cell.row}x${cell.col}`)
 
   if (cell.color == "white") {
     node.classList.add('white')
