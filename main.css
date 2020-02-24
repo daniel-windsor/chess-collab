@@ -1,9 +1,28 @@
-.body {
+body {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  width: 100vw;
 }
 
 .board {
+  display: flex;
+  flex-wrap: wrap;
   border: 3px solid black;
+  width: 680px;
+  height: 680px;
+}
+
+.cell {
+  width: 85px;
+  height: 85px;
+}
+
+.white {
+  background-color: white;
+}
+
+.black {
+  background-color: black;
 }
