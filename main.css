@@ -1,17 +1,32 @@
+:root {
+  --black-square: #25282A;
+  --black-piece: #2C3D40;
+  --white-square: #E2D7B9;
+  --white-piece: #D2A662;
+  --main-color: #3F5350;
+  --text-color: #B4AE87
+}
+
 body {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0px;
   height: 100vh;
   width: 100vw;
+  background-color: var(--main-color);
 }
 
 .board {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
   flex-wrap: wrap;
-  border: 3px solid black;
   width: 680px;
   height: 680px;
+  border: 10px solid var(--text-color)
+
 }
 
 .cell {
@@ -20,9 +35,9 @@ body {
 }
 
 .white {
-  background-color: white;
+  background-color: var(--white-square);
 }
 
 .black {
-  background-color: black;
+  background-color: var(--black-square);
 }
