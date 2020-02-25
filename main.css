@@ -51,10 +51,14 @@ body {
   background-color: var(--black-square);
 }
 
-.b {
-  color: var(--black-piece)
-}
+
+
+/* pieces */
 
 .w {
-  color: var(--white-piece)
+  color: var(--white-piece);
+}
+
+.b {
+  color: var(--black-piece);
 }
