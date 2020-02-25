@@ -78,6 +78,12 @@ function startGame() {
   console.log("started")
 
   generateBoard()
+
+  //Pieces for testing
+  let test1 = document.getElementsByClassName("c4x4")[0]
+  test1.innerHTML = "<i class='fas fa-chess-knight kw'></i>"
+  let test2 = document.getElementsByClassName("c3x2")[0]
+  test2.innerHTML = "<i class='fas fa-chess-knight kw'></i>"
 }
 
 //Programmatically creates Chess Board
@@ -118,6 +124,9 @@ function cellsToNodes(boardNode, cell) {
   return boardNode;
 }
 
+// Need to filter out cells with piece of same colour
+// Need to add 'in-between' squares for pieces that can move more than one cell
+// Maybe have 'find squares' as it's own method called by highlight
 function highlight(evt) {
 
   //remove previous highlights
@@ -127,12 +136,13 @@ function highlight(evt) {
   //highlight selected
   evt.target.classList.add('highlight')
 
-  const type = "knight" //get piece in square
-
   //Find row and col of selected
   const cell = evt.target.className.split(' ')[1].split('')
   const row = Number(cell[1])
   const col = Number(cell[3])
+
+  //Find piece in cell
+  const type = evt.target.children[0].classList[1].split('-')[2]
 
   const moveSet = pieces[type].move
   let newCoordinates = []
