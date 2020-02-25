@@ -5,7 +5,9 @@ const pieces = {
   pawn: {
     move: [
       [1, 0]
-    ]
+    ],
+    whiteStarting: ["c6x0", "c6x1", "c6x2", "c6x3", "c6x4", "c6x5", "c6x6", "c6x7"],
+    blackStarting: ["c1x0", "c1x1", "c1x2", "c1x3", "c1x4", "c1x5", "c1x6", "c1x7"]
   },
   castle: {
     move: [
@@ -13,7 +15,9 @@ const pieces = {
       [-7, 0],
       [0, 7],
       [0, -7]
-    ]
+    ],
+    whiteStarting: ["c7x0", "c7x7"],
+    blackStarting: ["c0x0", "c0x7"]
   },
   knight: {
     move: [
@@ -25,7 +29,9 @@ const pieces = {
       [-1, -2],
       [-2, 1],
       [-2, -1]
-    ]
+    ],
+    whiteStarting: ["c7x1", "c7x6"],
+    blackStarting: ["c0x1", "c0x6"]
   },
   bishop: {
     move: [
@@ -33,7 +39,9 @@ const pieces = {
       [7, -7],
       [-7, 7],
       [-7, -7],
-    ]
+    ],
+    whiteStarting: ["c7x2", "c7x5"],
+    blackStarting: ["c0x2", "c0x5"]
   },
   queen: {
     move: [
@@ -45,7 +53,9 @@ const pieces = {
       [7, -7],
       [-7, 7],
       [-7, -7]
-    ]
+    ],
+    whiteStarting: ["c7x3"],
+    blackStarting: ["c0x4"]
   },
   king: {
     move: [
@@ -57,7 +67,9 @@ const pieces = {
       [1, -1],
       [-1, 1],
       [-1, -1]
-    ]
+    ],
+    whiteStarting: ["c7x4"],
+    blackStarting: ["c0x3"]
   }
 }
 
