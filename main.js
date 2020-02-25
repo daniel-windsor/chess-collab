@@ -92,7 +92,7 @@ function generateBoard() {
 function cellsToNodes(boardNode, cell) {
   const node = document.createElement('div');
   node.classList.add('cell')
-  node.classList.add(`${cell.row}x${cell.col}`)
+  node.classList.add(`c${cell.row}x${cell.col}`)
 
   if (cell.color == "white") {
     node.classList.add('white')
@@ -109,21 +109,29 @@ function cellsToNodes(boardNode, cell) {
 function onClick(evt) {
 
   //remove previous highlights
-  let highlighted = document.querySelectorAll('.highlight')
+  const highlighted = document.querySelectorAll('.highlight')
   highlighted.forEach(x => x.classList.remove('highlight'))
 
   //highlight selected
-  evt.target.classList.toggle('highlight')
+  evt.target.classList.add('highlight')
 
-  
-  const type = "pawn" //get piece in square
+  const type = "knight" //get piece in square
 
   //Find row and col of selected
-  let cell = evt.target.className.split(' ')[1]
-  const row = cell.split('x')[0]
-  const col = cell.split('x')[1]
+  const cell = evt.target.className.split(' ')[1].split('')
+  const row = Number(cell[1])
+  const col = Number(cell[3])
+  const colour = cell
 
   const moveSet = pieces[type].move
 
-  console.log(moveSet)
+  for (let i = 0; i < moveSet.length; i++) {
+    //Find valid squares based on moveSet and current position
+    let newCoordinate = `.c${row + moveSet[i][0]}x${col + moveSet[i][1]}`
+
+    //Make sure square exists
+    if (document.querySelector(newCoordinate)) {
+      document.querySelector(newCoordinate).classList.add('highlight')
+    }
+  }
 }

@@ -23,8 +23,8 @@ body {
   align-items: center;
   align-content: center;
   flex-wrap: wrap;
-  width: 704px;
-  height: 704px;
+  width: 728px;
+  height: 728px;
   border: 10px solid var(--text-color)
 }
 
@@ -36,11 +36,15 @@ body {
   justify-content: center;
   font-size: 70px;
   transition: border 0.7 ease;
-  border: 1.5px solid var(--text-color);
+  border: 3px solid var(--text-color);
+}
+
+.highlight-blue {
+  border: 3px solid blue;
 }
 
 .highlight {
-  border: 1.5px solid red;
+  border: 3px solid red;
 }
 
 .white {
