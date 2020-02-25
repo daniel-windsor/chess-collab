@@ -2,7 +2,7 @@ Yohan and Dan try to build Chess together
 
 Things to do:
 
-[getting there] Add pieces
+[x] Add pieces
 [] Add ability to move pieces between divs
 [] On piece selection, highlight squares piece can move to
 [] Check for check and if move is legal
@@ -20,5 +20,5 @@ class nomenclature for pieces
 <i class="fas fa-chess-queen"></i> qw, qb
 
 <i class="fas fa-chess-bishop"></i> ... and so on
-<i class="fas fa-chess-knight"></i> 
+<i class="fas fa-chess-knight"></i> !! nw, nb
 <i class="fas fa-chess-rook"></i> 

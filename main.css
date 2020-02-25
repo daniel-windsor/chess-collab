@@ -49,6 +49,11 @@ body {
 
 
 /* pieces */
-.pw {
-  color: white;
+
+.w {
+  color: var(--white-piece);
+}
+
+.b {
+  color: var(--black-piece);
 }

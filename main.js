@@ -81,35 +81,79 @@ function startGame() {
 }
 
 function populateBoard() {
+  // white pawns
+  for (let i = 0; i < pieces.pawn.whiteStarting.length; i++) {
+    let cell = document.querySelector(`.${pieces.pawn.whiteStarting[i]}`);
+    cell.innerHTML = `<i class="fas fa-chess-pawn w pw pw${i}"></i>`
+  };
 
-  //unless i can think of a way to refactor this function for it to be less verbose, we might have to split this function further --> function populatePawns, populateKings, etc.. idk what do you think?
+  // black pawns
+  for (let i = 0; i < pieces.pawn.blackStarting.length; i++) {
+    let cell = document.querySelector(`.${pieces.pawn.blackStarting[i]}`);
+    cell.innerHTML = `<i class="fas fa-chess-pawn b pb pb${i}"></i>`
+  };
 
-  //read README.md for class naming system for pieces. i've just used classes for everything not ids.
+  // white castles
+  for (let i = 0; i < pieces.castle.whiteStarting.length; i++) {
+    let cell = document.querySelector(`.${pieces.castle.whiteStarting[i]}`);
+    cell.innerHTML = `<i class="fas fa-chess-rook w cw cw${i}"></i>`
+  };
 
-  //populate black pawns
-  let cellsBPawns = []; 
-  for (let i = 0; i < 8; i++) {
-    let cellBPawn = document.getElementsByClassName(`1x${i}`) //possible via querySelector? 
-    cellsBPawns.push(cellBPawn)
-  }
+  // black castles
+  for (let i = 0; i < pieces.castle.blackStarting.length; i++) {
+    let cell = document.querySelector(`.${pieces.castle.blackStarting[i]}`);
+    cell.innerHTML = `<i class="fas fa-chess-rook b cb cb${i}"></i>`
+  };
 
-  for (let i = 0; i < 8; i++) {
-    cellsBPawns[i][0].innerHTML = `<i class="fas fa-chess-pawn pb pb${i}"></i>`
-  }
+  // white knights
+  for (let i = 0; i < pieces.knight.blackStarting.length; i++) {
+    let cell = document.querySelector(`.${pieces.knight.whiteStarting[i]}`);
+    cell.innerHTML = `<i class="fas fa-chess-knight w nw nw${i}"></i>`
+  };
 
-  //populate white pawns
-  let cellsWPawns = []; 
-  for (let i = 0; i < 8; i++) {
-    let cellWPawn = document.getElementsByClassName(`6x${i}`) //possible via querySelector? 
-    cellsWPawns.push(cellWPawn)
-  }
+  // black knights
+  for (let i = 0; i < pieces.knight.blackStarting.length; i++) {
+    let cell = document.querySelector(`.${pieces.knight.blackStarting[i]}`);
+    cell.innerHTML = `<i class="fas fa-chess-knight b nb nb${i}"></i>`
+  };
 
-  for (let i = 0; i < 8; i++) {
-    cellsWPawns[i][0].innerHTML = `<i class="fas fa-chess-pawn pw pw${i}"></i>`
-  }
+  // white bishops
+  for (let i = 0; i < pieces.bishop.whiteStarting.length; i++) {
+    let cell = document.querySelector(`.${pieces.bishop.whiteStarting[i]}`);
+    cell.innerHTML = `<i class="fas fa-chess-bishop w bw bw${i}"></i>`
+  };
+
+  // black bishops
+  for (let i = 0; i < pieces.bishop.blackStarting.length; i++) {
+    let cell = document.querySelector(`.${pieces.bishop.blackStarting[i]}`);
+    cell.innerHTML = `<i class="fas fa-chess-bishop b bb bb${i}"></i>`
+  };
+
+  // white queen
+  for (let i = 0; i < pieces.queen.whiteStarting.length; i++) {
+    let cell = document.querySelector(`.${pieces.queen.whiteStarting[i]}`);
+    cell.innerHTML = `<i class="fas fa-chess-queen w qw"></i>`
+  };
+
+  // black queen
+  for (let i = 0; i < pieces.queen.blackStarting.length; i++) {
+    let cell = document.querySelector(`.${pieces.queen.blackStarting[i]}`);
+    cell.innerHTML = `<i class="fas fa-chess-queen b qb"></i>`
+  };
+
+  // white king
+  for (let i = 0; i < pieces.king.whiteStarting.length; i++) {
+    let cell = document.querySelector(`.${pieces.king.whiteStarting[i]}`);
+    cell.innerHTML = `<i class="fas fa-chess-king w kw"></i>`
+  };
+
+  // black king
+  for (let i = 0; i < pieces.king.blackStarting.length; i++) {
+    let cell = document.querySelector(`.${pieces.king.blackStarting[i]}`);
+    cell.innerHTML = `<i class="fas fa-chess-king b kb"></i>`
+  };
 
 }
-
 
 //Programmatically creates Chess Board
 function generateBoard() {
@@ -134,7 +178,7 @@ function generateBoard() {
 function cellsToNodes(boardNode, cell) {
   const node = document.createElement('div');
   node.classList.add('cell')
-  node.classList.add(`${cell.row}x${cell.col}`)
+  node.classList.add(`c${cell.row}x${cell.col}`)
 
   if (cell.color == "white") {
     node.classList.add('white')
