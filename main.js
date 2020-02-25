@@ -2,15 +2,44 @@ document.addEventListener('DOMContentLoaded', startGame)
 
 function startGame() {
   console.log("started")
-
   //Instantiate click listeners
-
   generateBoard()
+  populateBoard()
 }
+
+function populateBoard() {
+
+  //unless i can think of a way to refactor this function for it to be less verbose, we might have to split this function further --> function populatePawns, populateKings, etc.. idk what do you think?
+
+  //read README.md for class naming system for pieces. i've just used classes for everything not ids.
+
+  //populate black pawns
+  let cellsBPawns = []; 
+  for (let i = 0; i < 8; i++) {
+    let cellBPawn = document.getElementsByClassName(`1x${i}`) //possible via querySelector? 
+    cellsBPawns.push(cellBPawn)
+  }
+
+  for (let i = 0; i < 8; i++) {
+    cellsBPawns[i][0].innerHTML = `<i class="fas fa-chess-pawn pb pb${i}"></i>`
+  }
+
+  //populate white pawns
+  let cellsWPawns = []; 
+  for (let i = 0; i < 8; i++) {
+    let cellWPawn = document.getElementsByClassName(`6x${i}`) //possible via querySelector? 
+    cellsWPawns.push(cellWPawn)
+  }
+
+  for (let i = 0; i < 8; i++) {
+    cellsWPawns[i][0].innerHTML = `<i class="fas fa-chess-pawn pw pw${i}"></i>`
+  }
+
+}
+
 
 //Programmatically creates Chess Board
 function generateBoard() {
-
   let board = {}
   board["cells"] = []
 

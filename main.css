@@ -45,3 +45,10 @@ body {
 .black {
   background-color: var(--black-square);
 }
+
+
+
+/* pieces */
+.pw {
+  color: white;
+}
