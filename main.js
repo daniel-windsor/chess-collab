@@ -32,7 +32,7 @@ const pieces = {
       [7, 7],
       [7, -7],
       [-7, 7],
-      [-7, -7]
+      [-7, -7],
     ]
   },
   queen: {
@@ -100,13 +100,13 @@ function cellsToNodes(boardNode, cell) {
     node.classList.add('black')
   }
 
-  node.addEventListener('click', onClick)
+  node.addEventListener('click', highlight)
 
   boardNode.appendChild(node)
   return boardNode;
 }
 
-function onClick(evt) {
+function highlight(evt) {
 
   //remove previous highlights
   const highlighted = document.querySelectorAll('.highlight')
@@ -121,17 +121,18 @@ function onClick(evt) {
   const cell = evt.target.className.split(' ')[1].split('')
   const row = Number(cell[1])
   const col = Number(cell[3])
-  const colour = cell
 
   const moveSet = pieces[type].move
+  let newCoordinates = []
 
   for (let i = 0; i < moveSet.length; i++) {
     //Find valid squares based on moveSet and current position
-    let newCoordinate = `.c${row + moveSet[i][0]}x${col + moveSet[i][1]}`
-
-    //Make sure square exists
-    if (document.querySelector(newCoordinate)) {
-      document.querySelector(newCoordinate).classList.add('highlight')
-    }
+    newCoordinates.push(`.c${row + (moveSet[i][0] % 8)}x${col + moveSet[i][1]}`)
   }
+
+  //If cell exists, highlight it
+  newCoordinates.forEach(coord => {
+    if (document.querySelector(coord))
+      document.querySelector(coord).classList.add('highlight')
+  })
 }
