@@ -9,12 +9,12 @@ const pieces = {
     whiteStarting: ["c6x0", "c6x1", "c6x2", "c6x3", "c6x4", "c6x5", "c6x6", "c6x7"],
     blackStarting: ["c1x0", "c1x1", "c1x2", "c1x3", "c1x4", "c1x5", "c1x6", "c1x7"]
   },
-  castle: {
+  rook: {
     move: [
-      [7, 0],
-      [-7, 0],
-      [0, 7],
-      [0, -7]
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1]
     ],
     whiteStarting: ["c7x0", "c7x7"],
     blackStarting: ["c0x0", "c0x7"]
@@ -35,24 +35,24 @@ const pieces = {
   },
   bishop: {
     move: [
-      [7, 7],
-      [7, -7],
-      [-7, 7],
-      [-7, -7],
+      [1, 1],
+      [1, -1],
+      [-1, 1],
+      [-1, -1],
     ],
     whiteStarting: ["c7x2", "c7x5"],
     blackStarting: ["c0x2", "c0x5"]
   },
   queen: {
     move: [
-      [7, 0],
-      [-7, 0],
-      [0, 7],
-      [0, -7],
-      [7, 7],
-      [7, -7],
-      [-7, 7],
-      [-7, -7]
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+      [1, 1],
+      [1, -1],
+      [-1, 1],
+      [-1, -1]
     ],
     whiteStarting: ["c7x3"],
     blackStarting: ["c0x4"]
@@ -81,9 +81,9 @@ function startGame() {
 
   //Pieces for testing
   let test1 = document.getElementsByClassName("c4x4")[0]
-  test1.innerHTML = "<i class='fas fa-chess-knight kw'></i>"
+  test1.innerHTML = "<i class='fas fa-chess-knight b'></i>"
   let test2 = document.getElementsByClassName("c3x2")[0]
-  test2.innerHTML = "<i class='fas fa-chess-knight kw'></i>"
+  test2.innerHTML = "<i class='fas fa-chess-knight w'></i>"
 }
 
 //Programmatically creates Chess Board
@@ -124,37 +124,60 @@ function cellsToNodes(boardNode, cell) {
   return boardNode;
 }
 
-// Need to filter out cells with piece of same colour
-// Need to add 'in-between' squares for pieces that can move more than one cell
-// Maybe have 'find squares' as it's own method called by highlight
+//Highlight each square a piece could move to
 function highlight(evt) {
+
+  //Ensures cell contains a piece
+  if(!evt.target.classList.contains('fas')) {
+    return;
+  }
 
   //remove previous highlights
   const highlighted = document.querySelectorAll('.highlight')
   highlighted.forEach(x => x.classList.remove('highlight'))
 
   //highlight selected
-  evt.target.classList.add('highlight')
+  evt.target.parentNode.classList.add('highlight')
+
+  const possibleMoves = getMoves(evt.target)
+
+  //If cell exists, highlight it
+  possibleMoves.forEach(coord => {
+    if (document.querySelector(coord))
+      document.querySelector(coord).classList.add('highlight')
+  })
+}
+
+//Return array of cells a piece can move to
+function getMoves(target) {
 
   //Find row and col of selected
-  const cell = evt.target.className.split(' ')[1].split('')
+  const cell = target.parentNode.className.split(' ')[1].split('')
   const row = Number(cell[1])
   const col = Number(cell[3])
 
   //Find piece in cell
-  const type = evt.target.children[0].classList[1].split('-')[2]
+  const type = target.classList[1].split('-')[2]
+  let colour = ""
+  
+  if (target.classList.contains('b')){
+    colour = "b"
+  } else {
+    colour = "w"
+  }
 
   const moveSet = pieces[type].move
-  let newCoordinates = []
+  let possibleMoves = []
 
   for (let i = 0; i < moveSet.length; i++) {
     //Find valid squares based on moveSet and current position
-    newCoordinates.push(`.c${row + (moveSet[i][0] % 8)}x${col + moveSet[i][1]}`)
+    let coord = `.c${row + (moveSet[i][0] % 8)}x${col + moveSet[i][1]}`
+    let children = document.querySelector(coord).children[0]
+
+    if(children == null || !children.classList.contains(colour)) {
+      possibleMoves.push(coord)
+    }
   }
 
-  //If cell exists, highlight it
-  newCoordinates.forEach(coord => {
-    if (document.querySelector(coord))
-      document.querySelector(coord).classList.add('highlight')
-  })
+  return possibleMoves;
 }

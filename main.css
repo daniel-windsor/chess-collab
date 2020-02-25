@@ -25,7 +25,7 @@ body {
   flex-wrap: wrap;
   width: 728px;
   height: 728px;
-  border: 10px solid var(--text-color)
+  border: 10px solid var(--text-color);
 }
 
 .cell {
@@ -51,6 +51,10 @@ body {
   background-color: var(--black-square);
 }
 
-.fas {
-  pointer-events: none;
+.b {
+  color: var(--black-piece)
+}
+
+.w {
+  color: var(--white-piece)
 }
