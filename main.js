@@ -217,22 +217,20 @@ function getMoves(target) {
 function pawnMoves(row, col, colour) {
   let arr = []
 
-  let direction = colour == "w" ? -1 : 1
+  let direction = colour == "w" ? -1 : 1 //find direction pawn needs to move in based on colour
 
-  //default
-  if (!document.querySelector(`.c${row+direction}x${col}`).children[0]) {
+  //default movement
+  if (!document.querySelector(`.c${row+direction}x${col}`).children[0]) { //If square in front has no pieces
     arr.push(`.c${row+direction}x${col}`)
 
     //starting two squares
-    if (colour == "w" && row == 6) {
-      arr.push(`.c4x${col}`)
-    } else if (colour == "b" && row == 1) {
-      arr.push(`.c3x${col}`)
+    if ((colour == "w" && row == 6)||(colour == "b" && row == 1)) {
+      arr.push(`.c${row+(direction*2)}x${col}`)
     }
   }
 
   //attacking
-  let diag = [`.c${row+direction}x${col-1}`, `.c${row+direction}x${col+1}`]
+  let diag = [`.c${row+direction}x${col-1}`, `.c${row+direction}x${col+1}`] //get sqaures 1 row ahead and each side
 
   for (let i = 0; i < diag.length; i++) {
     if (document.querySelector(diag[i])) {
