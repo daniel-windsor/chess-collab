@@ -123,15 +123,9 @@ function populateBoard() {
   for (let piece in pieces) {
     for (let i = 0; i < (pieces[piece].white.starting).length; i++) {
       document.querySelector(pieces[piece].white.starting[i]).innerHTML = pieces[piece].white.icon
-    }
-    for (let i = 0; i < (pieces[piece].black.starting).length; i++) {
       document.querySelector(pieces[piece].black.starting[i]).innerHTML = pieces[piece].black.icon
     }
-
-
   }
-
-
 
   // // white pawns
   // for (let i = 0; i < pieces.pawn.whiteStarting.length; i++) {
