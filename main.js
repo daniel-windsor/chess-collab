@@ -78,12 +78,6 @@ function startGame() {
   console.log("started")
 
   generateBoard()
-
-  //Pieces for testing
-  let test1 = document.getElementsByClassName("c4x4")[0]
-  test1.innerHTML = "<i class='fas fa-chess-knight b'></i>"
-  let test2 = document.getElementsByClassName("c3x2")[0]
-  test2.innerHTML = "<i class='fas fa-chess-knight w'></i>"
 }
 
 //Programmatically creates Chess Board
