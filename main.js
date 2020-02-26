@@ -3,9 +3,7 @@ document.addEventListener('DOMContentLoaded', startGame)
 //Obj containing pieces and their move sets: [row, col]
 const pieces = {
   pawn: {
-    move: [
-      [1, 0]
-    ],
+    move: [],
     white: {
       starting: [".c6x0", ".c6x1", ".c6x2", ".c6x3", ".c6x4", ".c6x5", ".c6x6", ".c6x7"],
       icon: "<i class='fas fa-chess-pawn w'</i>"
@@ -17,10 +15,10 @@ const pieces = {
   },
   rook: {
     move: [
-      [7, 0],
-      [-7, 0],
-      [0, 7],
-      [0, -7]
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1]
     ],
     white: {
       starting: [".c7x0", ".c7x7"],
@@ -53,10 +51,10 @@ const pieces = {
   },
   bishop: {
     move: [
-      [7, 7],
-      [7, -7],
-      [-7, 7],
-      [-7, -7],
+      [1, 1],
+      [1, -1],
+      [-1, 1],
+      [-1, -1],
     ],
     white: {
       starting: [".c7x2", ".c7x5"],
@@ -69,14 +67,14 @@ const pieces = {
   },
   queen: {
     move: [
-      [7, 0],
-      [-7, 0],
-      [0, 7],
-      [0, -7],
-      [7, 7],
-      [7, -7],
-      [-7, 7],
-      [-7, -7]
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+      [1, 1],
+      [1, -1],
+      [-1, 1],
+      [-1, -1]
     ],
     white: {
       starting: [".c7x3"],
@@ -109,12 +107,10 @@ const pieces = {
   }
 }
 
-
-
 function startGame() {
-  console.log("started")
-  //Instantiate click listeners
+
   generateBoard()
+
   populateBoard()
 }
 
@@ -126,79 +122,6 @@ function populateBoard() {
       document.querySelector(pieces[piece].black.starting[i]).innerHTML = pieces[piece].black.icon
     }
   }
-
-  // // white pawns
-  // for (let i = 0; i < pieces.pawn.whiteStarting.length; i++) {
-  //   let cell = document.querySelector(`.${pieces.pawn.whiteStarting[i]}`);
-  //   cell.innerHTML = `<i class="fas fa-chess-pawn w pw pw${i}"></i>`
-  // };
-
-  // // black pawns
-  // for (let i = 0; i < pieces.pawn.blackStarting.length; i++) {
-  //   let cell = document.querySelector(`.${pieces.pawn.blackStarting[i]}`);
-  //   cell.innerHTML = `<i class="fas fa-chess-pawn b pb pb${i}"></i>`
-  // };
-
-  // // white castles
-  // for (let i = 0; i < pieces.castle.whiteStarting.length; i++) {
-  //   let cell = document.querySelector(`.${pieces.castle.whiteStarting[i]}`);
-  //   cell.innerHTML = `<i class="fas fa-chess-rook w cw cw${i}"></i>`
-  // };
-
-  // // black castles
-  // for (let i = 0; i < pieces.castle.blackStarting.length; i++) {
-  //   let cell = document.querySelector(`.${pieces.castle.blackStarting[i]}`);
-  //   cell.innerHTML = `<i class="fas fa-chess-rook b cb cb${i}"></i>`
-  // };
-
-  // // white knights
-  // for (let i = 0; i < pieces.knight.blackStarting.length; i++) {
-  //   let cell = document.querySelector(`.${pieces.knight.whiteStarting[i]}`);
-  //   cell.innerHTML = `<i class="fas fa-chess-knight w nw nw${i}"></i>`
-  // };
-
-  // // black knights
-  // for (let i = 0; i < pieces.knight.blackStarting.length; i++) {
-  //   let cell = document.querySelector(`.${pieces.knight.blackStarting[i]}`);
-  //   cell.innerHTML = `<i class="fas fa-chess-knight b nb nb${i}"></i>`
-  // };
-
-  // // white bishops
-  // for (let i = 0; i < pieces.bishop.whiteStarting.length; i++) {
-  //   let cell = document.querySelector(`.${pieces.bishop.whiteStarting[i]}`);
-  //   cell.innerHTML = `<i class="fas fa-chess-bishop w bw bw${i}"></i>`
-  // };
-
-  // // black bishops
-  // for (let i = 0; i < pieces.bishop.blackStarting.length; i++) {
-  //   let cell = document.querySelector(`.${pieces.bishop.blackStarting[i]}`);
-  //   cell.innerHTML = `<i class="fas fa-chess-bishop b bb bb${i}"></i>`
-  // };
-
-  // // white queen
-  // for (let i = 0; i < pieces.queen.whiteStarting.length; i++) {
-  //   let cell = document.querySelector(`.${pieces.queen.whiteStarting[i]}`);
-  //   cell.innerHTML = `<i class="fas fa-chess-queen w qw"></i>`
-  // };
-
-  // // black queen
-  // for (let i = 0; i < pieces.queen.blackStarting.length; i++) {
-  //   let cell = document.querySelector(`.${pieces.queen.blackStarting[i]}`);
-  //   cell.innerHTML = `<i class="fas fa-chess-queen b qb"></i>`
-  // };
-
-  // // white king
-  // for (let i = 0; i < pieces.king.whiteStarting.length; i++) {
-  //   let cell = document.querySelector(`.${pieces.king.whiteStarting[i]}`);
-  //   cell.innerHTML = `<i class="fas fa-chess-king w kw"></i>`
-  // };
-
-  // // black king
-  // for (let i = 0; i < pieces.king.blackStarting.length; i++) {
-  //   let cell = document.querySelector(`.${pieces.king.blackStarting[i]}`);
-  //   cell.innerHTML = `<i class="fas fa-chess-king b kb"></i>`
-  // };
-
 }
 
 //Programmatically creates Chess Board
@@ -226,12 +149,96 @@ function cellsToNodes(boardNode, cell) {
   node.classList.add('cell')
   node.classList.add(`c${cell.row}x${cell.col}`)
 
-  if (cell.color == "white") {
-    node.classList.add('white')
-  } else {
-    node.classList.add('black')
-  }
+  cell.color == "white" ? node.classList.add('white') : node.classList.add('black')
+
+  node.addEventListener('click', highlight)
 
   boardNode.appendChild(node)
   return boardNode;
+}
+
+//Highlight each square a piece could move to
+function highlight(evt) {
+
+  //Ensures cell contains a piece
+  if (!evt.target.classList.contains('fas')) {
+    return;
+  }
+
+  //remove previous highlights
+  const highlighted = document.querySelectorAll('.highlight')
+  highlighted.forEach(x => x.classList.remove('highlight'))
+
+  //highlight selected
+  evt.target.parentNode.classList.add('highlight')
+
+  const possibleMoves = getMoves(evt.target)
+
+  //If cell exists, highlight it
+  possibleMoves.forEach(coord => {
+    document.querySelector(coord).classList.add('highlight')
+  })
+}
+
+//Return array of cells a piece can move to
+function getMoves(target) {
+
+  //Find row and col of selected
+  const cell = target.parentNode.className.split(' ')[1].split('')
+  const row = Number(cell[1])
+  const col = Number(cell[3])
+
+  //Find type and colour of piece
+  const type = target.classList[1].split('-')[2]
+  let colour = target.classList.contains('b') ? 'b' : 'w'
+
+  const moveSet = pieces[type].move
+  let possibleMoves = []
+
+  if (type == 'pawn') {
+    possibleMoves.push(...pawnMoves(row, col, colour))
+  }
+
+  for (let i = 0; i < moveSet.length; i++) {
+    //Find valid squares based on moveSet and current position
+    let coord = `.c${row + (moveSet[i][0] % 8)}x${col + moveSet[i][1]}`
+
+    if (document.querySelector(coord)) {
+      let children = document.querySelector(coord).children[0]
+
+      if (children == null || !children.classList.contains(colour)) {
+        possibleMoves.push(coord)
+      }
+    }
+  }
+  return possibleMoves;
+}
+
+function pawnMoves(row, col, colour) {
+  let arr = []
+
+  let direction = colour == "w" ? -1 : 1 //find direction pawn needs to move in based on colour
+
+  //default movement
+  if (!document.querySelector(`.c${row+direction}x${col}`).children[0]) { //If square in front has no pieces
+    arr.push(`.c${row+direction}x${col}`)
+
+    //starting two squares
+    if ((colour == "w" && row == 6)||(colour == "b" && row == 1)) {
+      arr.push(`.c${row+(direction*2)}x${col}`)
+    }
+  }
+
+  //attacking
+  let diag = [`.c${row+direction}x${col-1}`, `.c${row+direction}x${col+1}`] //get sqaures 1 row ahead and each side
+
+  for (let i = 0; i < diag.length; i++) {
+    if (document.querySelector(diag[i])) {
+      let children = document.querySelector(diag[i]).children
+      if (children[0] && !children[0].classList.contains(colour)) {
+        arr.push(diag[i])
+      }
+    }
+  }
+  return arr
 }
