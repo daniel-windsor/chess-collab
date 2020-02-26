@@ -77,7 +77,7 @@ const pieces = {
       // [-1, -1]
     ],
     white: {
-      starting: [".c7x3"],
+      starting: [".c4x4"],
       icon: '<i class="fas fa-chess-queen w"></i>'
     },
     black: {
@@ -266,88 +266,63 @@ function queenMoves(row, col, colour) {
 }
 
 function maxStraight(row, col, colour) {
-  let arr = []
 
-  //maxNorth
-  for (let i = row - 1; i > -1; i--) {
-    if (!document.querySelector(`.c${i}x${col}`).children[0]) {
-      arr.push((`.c${i}x${col}`))
-    } else {
-      break;
-    }
+  const moves = {
+    north: [],
+    south: [],
+    east: [],
+    west: []
   }
 
-  //maxSouth
-  for (let i = row + 1; i < 8; i++) {
-    if (!document.querySelector(`.c${i}x${col}`).children[0]) {
-      arr.push((`.c${i}x${col}`))
-    } else {
-      break;
-    }
+  for (let i = 1; i < 8; i++) { //Gets coords for all cells within 8 cells in all directions
+    moves.north.push(`.c${row-i}x${col}`)
+    moves.south.push(`.c${row+i}x${col}`)
+    moves.east.push(`.c${row}x${col+i}`)
+    moves.west.push(`.c${row}x${col-i}`)
   }
 
-  //maxEast
-  for (let i = col + 1; i < 8; i++) {
-    if (!document.querySelector(`.c${row}x${i}`).children[0]) {
-      arr.push((`.c${row}x${i}`))
-    } else {
-      break;
-    }
-  }
-
-  //maxWest
-  for (let i = col - 1; i > -1; i--) {
-    if (!document.querySelector(`.c${row}x${i}`).children[0]) {
-      arr.push((`.c${row}x${i}`))
-    } else {
-      break;
-    }
-  }
-
-  console.log(arr)
-
-  return arr;
+  return [...filterMoves(moves, colour)]
 }
 
 function maxDiagonal(row, col, colour) {
 
-  let arr = []
-
-  //maxNorthEast
-  for (let i = 1; i < 8; i++) {
-    if (!document.querySelector(`.c${row-i}x${col+i}`).children[0]) {
-      arr.push((`.c${row-i}x${col+i}`))
-    } else {
-      break;
-    }
+  const moves = {
+    north: [],  //northeast
+    east: [],   //southeast
+    south: [],  //southwest
+    west: []    //northwest
   }
 
-  //maxSouthEast
   for (let i = 1; i < 8; i++) {
-    if (!document.querySelector(`.c${row+i}x${col+i}`).children[0]) {
-      arr.push((`.c${row+i}x${col+i}`))
-    } else {
-      break;
-    }
+    moves.north.push(`.c${row-i}x${col+i}`)
+    moves.east.push(`.c${row+i}x${col+i}`)
+    moves.south.push(`.c${row+i}x${col-i}`)
+    moves.west.push(`.c${row-i}x${col-i}`)
   }
 
-  //maxSouthWest
-  for (let i = 1; i < 8; i++) {
-    if (!document.querySelector(`.c${row+i}x${col-i}`).children[0]) {
-      arr.push((`.c${row+i}x${col-i}`))
-    } else {
-      break;
-    }
-  }
-
-  //maxNorthWest
-  for (let i = 1; i < 8; i++) {
-    if (!document.querySelector(`.c${row-i}x${col-i}`).children[0]) {
-      arr.push((`.c${row-i}x${col-i}`))
-    } else {
-      break;
-    }
-  }
-
-  return arr
+  return [...filterMoves(moves, colour)]
 }
+
+function filterMoves(arr, colour) {
+
+  const moves = {
+    north: [],
+    south: [],
+    east: [],
+    west: []
+  }
+
+  const finalArray = []
+
+  for (let move in arr) {
+    console.log(moves[move])
+    moves[move].push(...arr[move].filter(el => document.querySelector(el))) //Ensures no cells are out of bounds
+
+    let index = moves[move].findIndex(el => document.querySelector(el).children[0]) //Finds index of first cell with a child
+
+    index != -1 ? finalArray.push(...moves[move].slice(0, index)) : finalArray.push(...moves[move]) //Cut array at index
+  }
+
+  return finalArray
+}
+
