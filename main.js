@@ -15,10 +15,10 @@ const pieces = {
   },
   rook: {
     move: [
-      [1, 0],
-      [-1, 0],
-      [0, 1],
-      [0, -1]
+      // [1, 0],
+      // [-1, 0],
+      // [0, 1],
+      // [0, -1]
     ],
     white: {
       starting: [".c7x0", ".c7x7"],
@@ -51,10 +51,10 @@ const pieces = {
   },
   bishop: {
     move: [
-      [1, 1],
-      [1, -1],
-      [-1, 1],
-      [-1, -1],
+      // [1, 1],
+      // [1, -1],
+      // [-1, 1],
+      // [-1, -1],
     ],
     white: {
       starting: [".c7x2", ".c7x5"],
@@ -67,14 +67,14 @@ const pieces = {
   },
   queen: {
     move: [
-      [1, 0],
-      [-1, 0],
-      [0, 1],
-      [0, -1],
-      [1, 1],
-      [1, -1],
-      [-1, 1],
-      [-1, -1]
+      // [1, 0],
+      // [-1, 0],
+      // [0, 1],
+      // [0, -1],
+      // [1, 1],
+      // [1, -1],
+      // [-1, 1],
+      // [-1, -1]
     ],
     white: {
       starting: [".c7x3"],
@@ -195,8 +195,18 @@ function getMoves(target) {
   const moveSet = pieces[type].move
   let possibleMoves = []
 
-  if (type == 'pawn') {
-    possibleMoves.push(...pawnMoves(row, col, colour))
+  switch (type) {
+    case "pawn":
+      possibleMoves.push(...pawnMoves(row, col, colour))
+      break;
+    case "rook":
+      possibleMoves.push(...rookMoves(row, col, colour))
+      break;
+    case "bishop":
+      possibleMoves.push(...bishopMoves(row, col, colour))
+      break;
+    case "queen":
+      possibleMoves.push(...queenMoves(row, col, colour))
   }
 
   for (let i = 0; i < moveSet.length; i++) {
@@ -224,7 +234,7 @@ function pawnMoves(row, col, colour) {
     arr.push(`.c${row+direction}x${col}`)
 
     //starting two squares
-    if ((colour == "w" && row == 6)||(colour == "b" && row == 1)) {
+    if ((colour == "w" && row == 6) || (colour == "b" && row == 1)) {
       arr.push(`.c${row+(direction*2)}x${col}`)
     }
   }
@@ -240,5 +250,104 @@ function pawnMoves(row, col, colour) {
       }
     }
   }
+  return arr
+}
+
+function rookMoves(row, col, colour) {
+  return maxStraight(row, col, colour)
+}
+
+function bishopMoves(row, col, colour) {
+  return maxDiagonal(row, col, colour)
+}
+
+function queenMoves(row, col, colour) {
+  return [...maxStraight(row, col, colour), ...maxDiagonal(row, col, colour)]
+}
+
+function maxStraight(row, col, colour) {
+  let arr = []
+
+  //maxNorth
+  for (let i = row - 1; i > -1; i--) {
+    if (!document.querySelector(`.c${i}x${col}`).children[0]) {
+      arr.push((`.c${i}x${col}`))
+    } else {
+      break;
+    }
+  }
+
+  //maxSouth
+  for (let i = row + 1; i < 8; i++) {
+    if (!document.querySelector(`.c${i}x${col}`).children[0]) {
+      arr.push((`.c${i}x${col}`))
+    } else {
+      break;
+    }
+  }
+
+  //maxEast
+  for (let i = col + 1; i < 8; i++) {
+    if (!document.querySelector(`.c${row}x${i}`).children[0]) {
+      arr.push((`.c${row}x${i}`))
+    } else {
+      break;
+    }
+  }
+
+  //maxWest
+  for (let i = col - 1; i > -1; i--) {
+    if (!document.querySelector(`.c${row}x${i}`).children[0]) {
+      arr.push((`.c${row}x${i}`))
+    } else {
+      break;
+    }
+  }
+
+  console.log(arr)
+
+  return arr;
+}
+
+function maxDiagonal(row, col, colour) {
+
+  let arr = []
+
+  //maxNorthEast
+  for (let i = 1; i < 8; i++) {
+    if (!document.querySelector(`.c${row-i}x${col+i}`).children[0]) {
+      arr.push((`.c${row-i}x${col+i}`))
+    } else {
+      break;
+    }
+  }
+
+  //maxSouthEast
+  for (let i = 1; i < 8; i++) {
+    if (!document.querySelector(`.c${row+i}x${col+i}`).children[0]) {
+      arr.push((`.c${row+i}x${col+i}`))
+    } else {
+      break;
+    }
+  }
+
+  //maxSouthWest
+  for (let i = 1; i < 8; i++) {
+    if (!document.querySelector(`.c${row+i}x${col-i}`).children[0]) {
+      arr.push((`.c${row+i}x${col-i}`))
+    } else {
+      break;
+    }
+  }
+
+  //maxNorthWest
+  for (let i = 1; i < 8; i++) {
+    if (!document.querySelector(`.c${row-i}x${col-i}`).children[0]) {
+      arr.push((`.c${row-i}x${col-i}`))
+    } else {
+      break;
+    }
+  }
+
   return arr
 }
