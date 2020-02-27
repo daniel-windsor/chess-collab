@@ -69,6 +69,8 @@ function startGame() {
   generateBoard()
 
   populateBoard()
+
+  document.querySelector('.button').addEventListener('click', resetBoard)
 }
 
 //Puts the pieces on the board
@@ -329,4 +331,8 @@ function capturePiece() { //Need to pass in some details about the captured piec
   node.innerHTML = "" //replace with object reference
 
   box.appendChild(node)
+}
+
+function resetBoard() {
+  
 }
