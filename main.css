@@ -18,6 +18,13 @@ body {
   background-color: var(--main-color);
 }
 
+h1 {
+  font-family: 'Parisienne';
+  font-size: 4em;
+  margin: 10px;
+  color: var(--white-square);
+}
+
 .game-container {
   display: flex;
   flex-direction: row;
