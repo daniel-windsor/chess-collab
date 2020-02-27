@@ -8,7 +8,7 @@ const pieces = {
       icon: "<i class='fas fa-chess-pawn w'</i>"
     },
     black: {
-      starting: [".c1x0", ".c1x1", ".c1x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
+      starting: [".c1x0", ".c1x1", ".c5x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
       icon: '<i class="fas fa-chess-pawn b"</i>'
     }
   },
@@ -109,7 +109,6 @@ function cellsToNodes(boardNode, cell) {
   cell.color == "white" ? node.classList.add('white') : node.classList.add('black')
 
   node.addEventListener('click', highlight)
-  node.addEventListener('click', identifyMovement)
 
   boardNode.appendChild(node)
   return boardNode;
@@ -117,6 +116,12 @@ function cellsToNodes(boardNode, cell) {
 
 //Highlight each square a piece could move to
 function highlight(evt) {
+
+  //stores selected cell on which highlights/possible moves is based
+  let cell = evt.target
+  if (cell.tagName === "I") {
+    cell = evt.target.parentNode
+  }
 
   //ensures cell contains a piece
   if (!evt.target.classList.contains('fas')) {
@@ -131,33 +136,43 @@ function highlight(evt) {
   evt.target.parentNode.classList.add('highlight')
 
   const possibleMoves = getMoves(evt.target)
-
   //if cell exists, highlight it
   possibleMoves.forEach(coord => {
     document.querySelector(coord).classList.add('highlight')
+    document.querySelector(coord).addEventListener('click', movePiece) // <-- needs to take in cell variable created above.
   })
 }
 
-function identifyMovement () {
+function movePiece (evt) {
+  //assign selected cell as destinationCell
+  const destinationCell = evt.target
+  console.log(destinationCell)
+  
+  //when a destinationCell is occupied, the click must not select the occupying piece, but the cell itself
 
-  highlighted = document.querySelectorAll('.highlight')
-  console.log(highlighted)
+  //take the child of the original cell and add it to the new cell
 
-  //isolate piece's cell
-  start = highlighted[highlighted.length - 1]
-  console.log(start)   // fix: atm, doesn't work for black pieces
+  //Then somehow remove the highlight class from all cells and also remove their event listeners
 
-  //isolate piece
-  piece = start.getElementsByTagName('i')[0];
-  console.log(piece)   // fix: atm, doesn't work for black pieces
 
-  //remove piece 
-  highlighted.forEach(cell => cell.addEventListener('click', (e) => {
-    const destination = e.target;
-    start.removeChild(piece)
-    destination.appendChild(piece)
-    removeHighlight()
-  }))
+
+
+  ///////// yesterday's code
+  // //isolate piece's cell
+  // start = highlighted[highlighted.length - 1]
+  // console.log(start)   // fix: atm, doesn't work for black pieces
+
+  // //isolate piece
+  // piece = start.getElementsByTagName('i')[0];
+  // console.log(piece)   // fix: atm, doesn't work for black pieces
+
+  // //remove piece 
+  // highlighted.forEach(cell => cell.addEventListener('click', (e) => {
+  //   const destination = e.target;
+  //   start.removeChild(piece)
+  //   destination.appendChild(piece)
+  //   removeHighlight()
+  // }))
 
 }
 
