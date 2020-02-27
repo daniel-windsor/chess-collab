@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', startGame)
 
-//Obj containing pieces and their move sets: [row, col]
+//Obj containing piece information
 const pieces = {
   pawn: {
-    move: [],
     white: {
       starting: [".c6x0", ".c6x1", ".c6x2", ".c6x3", ".c6x4", ".c6x5", ".c6x6", ".c6x7"],
       icon: "<i class='fas fa-chess-pawn w'</i>"
@@ -14,12 +13,6 @@ const pieces = {
     }
   },
   rook: {
-    move: [
-      [1, 0],
-      [-1, 0],
-      [0, 1],
-      [0, -1]
-    ],
     white: {
       starting: [".c7x0", ".c7x7"],
       icon: '<i class="fas fa-chess-rook w"></i>'
@@ -30,16 +23,6 @@ const pieces = {
     }
   },
   knight: {
-    move: [
-      [2, 1],
-      [2, -1],
-      [1, 2],
-      [1, -2],
-      [-1, 2],
-      [-1, -2],
-      [-2, 1],
-      [-2, -1]
-    ],
     white: {
       starting: [".c7x1", ".c7x6"],
       icon: '<i class="fas fa-chess-knight w"></i>'
@@ -50,14 +33,8 @@ const pieces = {
     }
   },
   bishop: {
-    move: [
-      [1, 1],
-      [1, -1],
-      [-1, 1],
-      [-1, -1],
-    ],
     white: {
-      starting: [".c7x2", ".c7x5"],
+      starting: [".c4x5", ".c7x5"],
       icon: '<i class="fas fa-chess-bishop w"></i>'
     },
     black: {
@@ -66,18 +43,8 @@ const pieces = {
     }
   },
   queen: {
-    move: [
-      [1, 0],
-      [-1, 0],
-      [0, 1],
-      [0, -1],
-      [1, 1],
-      [1, -1],
-      [-1, 1],
-      [-1, -1]
-    ],
     white: {
-      starting: [".c7x3"],
+      starting: [".c4x4"],
       icon: '<i class="fas fa-chess-queen w"></i>'
     },
     black: {
@@ -86,16 +53,6 @@ const pieces = {
     }
   },
   king: {
-    move: [
-      [1, 0],
-      [-1, 0],
-      [0, 1],
-      [0, -1],
-      [1, 1],
-      [1, -1],
-      [-1, 1],
-      [-1, -1]
-    ],
     white: {
       starting: [".c7x4"],
       icon: '<i class="fas fa-chess-king w"></i>'
@@ -113,7 +70,7 @@ function startGame() {
 
   populateBoard()
 }
-
+//Puts the pieces on the board
 function populateBoard() {
 
   for (let piece in pieces) {
@@ -161,7 +118,7 @@ function cellsToNodes(boardNode, cell) {
 //Highlight each square a piece could move to
 function highlight(evt) {
 
-  //Ensures cell contains a piece
+  //ensures cell contains a piece
   if (!evt.target.classList.contains('fas')) {
     return;
   }
@@ -175,7 +132,7 @@ function highlight(evt) {
 
   const possibleMoves = getMoves(evt.target)
 
-  //If cell exists, highlight it
+  //if cell exists, highlight it
   possibleMoves.forEach(coord => {
     document.querySelector(coord).classList.add('highlight')
   })
@@ -218,47 +175,52 @@ function getMoves(target) {
 
   //Find type and colour of piece
   const type = target.classList[1].split('-')[2]
-  let colour = target.classList.contains('b') ? 'b' : 'w'
+  const colour = target.classList.contains('b') ? 'b' : 'w'
 
-  const moveSet = pieces[type].move
-  let possibleMoves = []
+  const possibleMoves = []
 
-  if (type == 'pawn') {
-    possibleMoves.push(...pawnMoves(row, col, colour))
+  switch (type) {
+    case "pawn":
+      possibleMoves.push(...pawnMoves(row, col, colour))
+      break;
+    case "rook":
+      possibleMoves.push(...maxStraight(row, col, colour))
+      break;
+    case "knight":
+      possibleMoves.push(...knightMoves(row, col, colour))
+      break;
+    case "bishop":
+      possibleMoves.push(...maxDiagonal(row, col, colour))
+      break;
+    case "queen":
+      possibleMoves.push(...maxStraight(row, col, colour), ...maxDiagonal(row, col, colour))
+      break;
+    case "king":
+      possibleMoves.push(...kingMoves(row, col, colour))
+      break;
   }
 
-  for (let i = 0; i < moveSet.length; i++) {
-    //Find valid squares based on moveSet and current position
-    let coord = `.c${row + (moveSet[i][0] % 8)}x${col + moveSet[i][1]}`
-
-    if (document.querySelector(coord)) {
-      let children = document.querySelector(coord).children[0]
-
-      if (children == null || !children.classList.contains(colour)) {
-        possibleMoves.push(coord)
-      }
-    }
-  }
   return possibleMoves;
 }
 
+//Handles pawn movement
 function pawnMoves(row, col, colour) {
   let arr = []
 
   let direction = colour == "w" ? -1 : 1 //find direction pawn needs to move in based on colour
 
-  //default movement
-  if (!document.querySelector(`.c${row+direction}x${col}`).children[0]) { //If square in front has no pieces
+  if (!document.querySelector(`.c${row+direction}x${col}`).children[0]) {
     arr.push(`.c${row+direction}x${col}`)
+  }
 
-    //starting two squares
-    if ((colour == "w" && row == 6)||(colour == "b" && row == 1)) {
+  if ((colour == "w" && row == 6) || (colour == "b" && row == 1)) {
+    if (!document.querySelector(`.c${row+direction*2}x${col}`).children[0]) {
       arr.push(`.c${row+(direction*2)}x${col}`)
     }
   }
 
   //attacking
-  let diag = [`.c${row+direction}x${col-1}`, `.c${row+direction}x${col+1}`] //get sqaures 1 row ahead and each side
+  let diag = [`.c${row+direction}x${col-1}`, `.c${row+direction}x${col+1}`] //get squares 1 row ahead and each side
 
   for (let i = 0; i < diag.length; i++) {
     if (document.querySelector(diag[i])) {
@@ -269,4 +231,116 @@ function pawnMoves(row, col, colour) {
     }
   }
   return arr
+}
+
+//Handles knight movement
+function knightMoves(row, col, colour) {
+  const moveSet = [
+    [2, 1],
+    [2, -1],
+    [1, 2],
+    [1, -2],
+    [-1, 2],
+    [-1, -2],
+    [-2, 1],
+    [-2, -1]
+  ]
+
+  const moves = moveSet.map(el => `.c${row + (el[0] % 8)}x${col + el[1]}`)
+    .filter(el => document.querySelector(el))
+    .filter(el => !document.querySelector(el).children[0] || !document.querySelector(el).children[0].classList.contains(colour))
+
+  return moves
+}
+
+//Handles king movement
+function kingMoves(row, col, colour) {
+  const moveSet = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+    [1, 1],
+    [1, -1],
+    [-1, 1],
+    [-1, -1]
+  ]
+
+  const moves = moveSet.map(el => `.c${row + (el[0] % 8)}x${col + el[1]}`)
+    .filter(el => document.querySelector(el))
+    .filter(el => !document.querySelector(el).children[0] || !document.querySelector(el).children[0].classList.contains(colour))
+
+  return moves
+}
+
+//Finds how far a piece can go straight
+function maxStraight(row, col, colour) {
+
+  const moves = {
+    north: [],
+    south: [],
+    east: [],
+    west: []
+  }
+
+  for (let i = 1; i < 8; i++) { //Gets coords for all cells within 8 cells in all directions
+    moves.north.push(`.c${row-i}x${col}`)
+    moves.south.push(`.c${row+i}x${col}`)
+    moves.east.push(`.c${row}x${col+i}`)
+    moves.west.push(`.c${row}x${col-i}`)
+  }
+
+  return [...filterMaxMoves(moves, colour)]
+}
+
+//Finds how far a piece can go diagonally
+function maxDiagonal(row, col, colour) {
+
+  const moves = {
+    north: [], //northeast     -- can't rename these because it breaks the filter
+    east: [], //southeast
+    south: [], //southwest
+    west: [] //northwest
+  }
+
+  for (let i = 1; i < 8; i++) {
+    moves.north.push(`.c${row-i}x${col+i}`)
+    moves.east.push(`.c${row+i}x${col+i}`)
+    moves.south.push(`.c${row+i}x${col-i}`)
+    moves.west.push(`.c${row-i}x${col-i}`)
+  }
+
+  return [...filterMaxMoves(moves, colour)]
+}
+
+//Ensures pieces don't try to move where they aren't allowed
+function filterMaxMoves(arr, colour) {
+
+  const moves = {
+    north: [],
+    south: [],
+    east: [],
+    west: []
+  }
+
+  const finalArray = []
+
+  for (let move in arr) {
+    moves[move].push(...arr[move].filter(el => document.querySelector(el))) //Ensures no cells are out of bounds
+
+    let index = moves[move].findIndex(el => document.querySelector(el).children[0]) //Finds index of first cell with a child
+
+    if (index != -1) {
+      let childColour = document.querySelector(moves[move][index]).children[0].classList.contains('w') ? 'w' : 'b'
+      if (childColour != colour) {
+        finalArray.push(...moves[move].slice(0, index + 1))
+      } else {
+        finalArray.push(...moves[move].slice(0, index))
+      }
+    } else {
+      finalArray.push(...moves[move])
+    }
+  }
+
+  return finalArray
 }
