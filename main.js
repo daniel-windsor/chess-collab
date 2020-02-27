@@ -122,7 +122,7 @@ function highlight(evt) {
   if (cell.tagName === "I") {
     cell = evt.target.parentNode
   }
-
+  
   //ensures cell contains a piece
   if (!evt.target.classList.contains('fas')) {
     return;
@@ -139,15 +139,17 @@ function highlight(evt) {
   //if cell exists, highlight it
   possibleMoves.forEach(coord => {
     document.querySelector(coord).classList.add('highlight')
-    document.querySelector(coord).addEventListener('click', movePiece) // <-- needs to take in cell variable created above.
+    document.querySelector(coord).addEventListener('click', function (evt) {movePiece(cell, evt)}) // <-- needs to take in cell variable created above.
   })
+
 }
 
-function movePiece (evt) {
+function movePiece (cell, evt) {
+
   //assign selected cell as destinationCell
   const destinationCell = evt.target
   console.log(destinationCell)
-  
+  console.log(cell)
   //when a destinationCell is occupied, the click must not select the occupying piece, but the cell itself
 
   //take the child of the original cell and add it to the new cell
