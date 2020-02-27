@@ -70,6 +70,7 @@ function startGame() {
 
   populateBoard()
 }
+
 //Puts the pieces on the board
 function populateBoard() {
 
@@ -315,4 +316,17 @@ function filterMaxMoves(arr, colour) {
   }
 
   return finalArray
+}
+
+//Move capture piece to side box
+function capturePiece() { //Need to pass in some details about the captured piece
+  //get type and colour of piece
+  const colour = ""
+
+  const box = document.querySelector(`.box.${colour}`)
+  const node = document.createElement('div')
+  node.classList.add('sub-box')
+  node.innerHTML = "" //replace with object reference
+
+  box.appendChild(node)
 }
