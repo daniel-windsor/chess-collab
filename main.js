@@ -315,12 +315,16 @@ function filterMoves(arr, colour) {
   const finalArray = []
 
   for (let move in arr) {
-    console.log(moves[move])
     moves[move].push(...arr[move].filter(el => document.querySelector(el))) //Ensures no cells are out of bounds
 
     let index = moves[move].findIndex(el => document.querySelector(el).children[0]) //Finds index of first cell with a child
 
-    index != -1 ? finalArray.push(...moves[move].slice(0, index)) : finalArray.push(...moves[move]) //Cut array at index
+    if (index != -1) {
+      let childColour = document.querySelector(moves[move][index]).children[0].classList.contains('w') ? 'w' : 'b'
+      childColour != colour ? finalArray.push(...moves[move].slice(0, index + 1)) : finalArray.push(...moves[move].slice(0, index))
+    } else {
+      finalArray.push(...moves[move])
+    }
   }
 
   return finalArray
