@@ -152,6 +152,7 @@ function cellsToNodes(boardNode, cell) {
   cell.color == "white" ? node.classList.add('white') : node.classList.add('black')
 
   node.addEventListener('click', highlight)
+  node.addEventListener('click', identifyMovement)
 
   boardNode.appendChild(node)
   return boardNode;
@@ -166,7 +167,7 @@ function highlight(evt) {
   }
 
   //remove previous highlights
-  const highlighted = document.querySelectorAll('.highlight')
+  highlighted = document.querySelectorAll('.highlight')
   highlighted.forEach(x => x.classList.remove('highlight'))
 
   //highlight selected
@@ -178,6 +179,33 @@ function highlight(evt) {
   possibleMoves.forEach(coord => {
     document.querySelector(coord).classList.add('highlight')
   })
+}
+
+function identifyMovement () {
+
+  highlighted = document.querySelectorAll('.highlight')
+  console.log(highlighted)
+
+  //isolate piece's cell
+  start = highlighted[highlighted.length - 1]
+  console.log(start)   // fix: atm, doesn't work for black pieces
+
+  //isolate piece
+  piece = start.getElementsByTagName('i')[0];
+  console.log(piece)   // fix: atm, doesn't work for black pieces
+
+  //remove piece 
+  highlighted.forEach(cell => cell.addEventListener('click', (e) => {
+    const destination = e.target;
+    start.removeChild(piece)
+    destination.appendChild(piece)
+    removeHighlight()
+  }))
+
+}
+
+function removeHighlight() {
+  highlighted.forEach(cell => cell.classList.remove('highlight'))
 }
 
 //Return array of cells a piece can move to
