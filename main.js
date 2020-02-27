@@ -334,5 +334,12 @@ function capturePiece() { //Need to pass in some details about the captured piec
 }
 
 function resetBoard() {
-  
+
+  let items = document.getElementsByClassName('fas')
+
+  while(items.length > 0) {
+    items[0].parentNode.removeChild(items[0])
+  }
+
+  populateBoard()
 }
