@@ -86,10 +86,12 @@ h1 {
 
 .highlight {
   border: 3px solid red;
+  cursor: pointer;
 }
 
 .selected {
   border: 3px solid blue;
+  cursor: pointer;
 }
 
 .white {
@@ -100,16 +102,14 @@ h1 {
   background-color: var(--black-square);
 }
 
-
-
-/* pieces */
-
 .w {
   color: var(--white-piece);
+  cursor: pointer;
 }
 
 .b {
   color: var(--black-piece);
+  cursor: pointer;
 }
 
 .button {
@@ -119,4 +119,5 @@ h1 {
   border-radius: 10px;
   font-size: 20px;
   padding: 10px;
+  cursor: pointer;
 }
