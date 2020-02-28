@@ -128,6 +128,13 @@ function highlight(evt) {
     return;
   }
 
+  //disables black piece selection if white's turn
+  let piece = evt.target
+  if (turn.whiteTurn && piece.classList.contains('b')) return;
+
+  //disables white piece selection if black's turn
+  if (!turn.whiteTurn && piece.classList.contains('w')) return;
+
   //stores selected cell on which highlights/possible moves is based
   let cell = evt.target.parentNode
   if (cell.tagName === "i") {
@@ -173,6 +180,8 @@ function movePiece(evt) {
   destinationCell.append(removedPiece)
 
   removeHighlight()
+  
+  turn.whiteTurn = !turn.whiteTurn
 }
 
 function removeHighlight() {
