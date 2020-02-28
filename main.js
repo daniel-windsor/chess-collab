@@ -153,7 +153,7 @@ function movePiece(evt) {
   const originalCell = document.querySelector('.selected')
 
   const destinationCell = evt.target
-  if (destinationCell.tagName === "i") {
+  if (destinationCell.tagName === "I") {
     destinationCell = evt.target.parentNode
   }
 
@@ -162,7 +162,7 @@ function movePiece(evt) {
   //when a destinationCell is occupied, the click must not select the occupying piece, but the cell itself
   ////////// 
 
-  if (destinationCell.children) {
+  if (destinationCell.children[0]) {
     capturePiece(destinationCell)
   }
 
@@ -170,7 +170,6 @@ function movePiece(evt) {
   const removedPiece = originalCell.removeChild(originalCell.children[0])
   destinationCell.append(removedPiece)
 
-  //remove the highlight class from all cells and also remove their event listeners
   removeHighlight()
 }
 
