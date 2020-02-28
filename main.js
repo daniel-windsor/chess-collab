@@ -64,6 +64,10 @@ const pieces = {
   }
 }
 
+let turn = {
+  whiteTurn: true
+}
+
 function startGame() {
 
   generateBoard()
