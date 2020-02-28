@@ -162,6 +162,10 @@ function movePiece(evt) {
   //when a destinationCell is occupied, the click must not select the occupying piece, but the cell itself
   ////////// 
 
+  if (destinationCell.children) {
+    capturePiece(destinationCell)
+  }
+
   //remove the child on the (home)cell, place in destinationCell
   const removedPiece = originalCell.removeChild(originalCell.children[0])
   destinationCell.append(removedPiece)
@@ -363,24 +367,33 @@ function filterMaxMoves(arr, colour) {
 }
 
 //Move capture piece to side box
-function capturePiece() { //Need to pass in some details about the captured piece
+function capturePiece(cell) { //Need to pass in some details about the captured piece
   //get type and colour of piece
-  const colour = ""
+  const colour = cell.children[0].classList.contains('w') ? 'white' : 'black'
+  console.log(colour)
 
   const box = document.querySelector(`.box.${colour}`)
   const node = document.createElement('div')
-  node.classList.add('sub-box')
-  node.innerHTML = "" //replace with object reference
+  const child = cell.children[0]
 
+  node.classList.add('sub-box')
+
+  node.appendChild(child)
   box.appendChild(node)
 }
 
 function resetBoard() {
 
-  let items = document.getElementsByClassName('fas')
+  const boardItems = document.getElementsByClassName('fas')
 
-  while (items.length > 0) {
-    items[0].parentNode.removeChild(items[0])
+  while (boardItems.length > 0) {
+    boardItems[0].parentNode.removeChild(boardItems[0])
+  }
+
+  const boxItems = document.getElementsByClassName('sub-box')
+
+  while (boxItems.length > 0){
+    boxItems[0].parentNode.removeChild(boxItems[0])
   }
 
   removeHighlight()
