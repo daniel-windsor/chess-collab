@@ -136,11 +136,11 @@ function highlight(evt) {
 
   // allow for toggling of the selected piece
   if (cell.classList.contains('selected')) {
-    removeHighlight(evt)
+    removeHighlight()
     return
   }
 
-  removeHighlight(evt)
+  removeHighlight()
 
   //mark selected
   cell.classList.add('selected')
@@ -149,11 +149,12 @@ function highlight(evt) {
   //if cell exists, highlight it
   possibleMoves.forEach(coord => {
     document.querySelector(coord).classList.add('highlight')
-    document.querySelector(coord).addEventListener('click', (evt) => movePiece(cell, possibleMoves, evt))
+    document.querySelector(coord).addEventListener('click', movePiece)
   })
 }
 
-function movePiece(cell, possibleMoves, evt) {
+function movePiece(evt) {
+  const originalCell = document.querySelector('.selected')
   const destinationCell = evt.target
   console.log('destinationCell', destinationCell)
 
@@ -161,22 +162,23 @@ function movePiece(cell, possibleMoves, evt) {
   ////////// 
 
   //remove the child on the (home)cell, place in destinationCell
-  const removedPiece = cell.removeChild(cell.children[0])
+  const removedPiece = originalCell.removeChild(originalCell.children[0])
   destinationCell.append(removedPiece)
 
   //remove the highlight class from all cells and also remove their event listeners
-  cell.classList.remove('highlight')
-  possibleMoves.forEach(coord => document.querySelector(`${coord}`).classList.remove('highlight'))
-
+  removeHighlight()
 }
 
-function removeHighlight(evt) {
+function removeHighlight() {
   if (document.querySelector('.selected')) {
     document.querySelector('.selected').classList.remove('selected')
   }
 
   const highlighted = document.querySelectorAll('.highlight')
-  highlighted.forEach(x => x.classList.remove('highlight'))
+  highlighted.forEach(function(el) {
+    el.classList.remove('highlight')
+    el.removeEventListener('click', movePiece)
+  })
 }
 
 //Return array of cells a piece can move to
