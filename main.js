@@ -116,13 +116,6 @@ function cellsToNodes(boardNode, cell) {
 
 //Highlight each square a piece could move to
 function highlight(evt) {
-
-  //stores selected cell on which highlights/possible moves is based
-  let cell = evt.target
-  if (cell.tagName === "I") {
-    cell = evt.target.parentNode
-  }
-  
   //ensures cell contains a piece
   if (!evt.target.classList.contains('fas')) {
     return;
@@ -132,54 +125,37 @@ function highlight(evt) {
   highlighted = document.querySelectorAll('.highlight')
   highlighted.forEach(x => x.classList.remove('highlight'))
 
+  //stores selected cell on which highlights/possible moves is based
+  let cell = evt.target
+  if (cell.tagName === "I") {
+    cell = evt.target.parentNode
+  }
+
   //highlight selected
-  evt.target.parentNode.classList.add('highlight')
+  cell.classList.add('highlight')
 
   const possibleMoves = getMoves(evt.target)
   //if cell exists, highlight it
   possibleMoves.forEach(coord => {
     document.querySelector(coord).classList.add('highlight')
-    document.querySelector(coord).addEventListener('click', function (evt) {movePiece(cell, evt)}) // <-- needs to take in cell variable created above.
+    document.querySelector(coord).addEventListener('click', (evt) => movePiece(cell, possibleMoves, evt))
   })
-
 }
 
-function movePiece (cell, evt) {
-
-  //assign selected cell as destinationCell
+function movePiece (cell, possibleMoves, evt) {
   const destinationCell = evt.target
-  console.log(destinationCell)
-  console.log(cell)
+  console.log('destinationCell', destinationCell)
+
   //when a destinationCell is occupied, the click must not select the occupying piece, but the cell itself
+  ////////// 
 
-  //take the child of the original cell and add it to the new cell
+  //remove the child on the (home)cell, place in destinationCell
+  const removedPiece = cell.removeChild(cell.children[0])
+  destinationCell.append(removedPiece)
 
-  //Then somehow remove the highlight class from all cells and also remove their event listeners
-
-
-
-
-  ///////// yesterday's code
-  // //isolate piece's cell
-  // start = highlighted[highlighted.length - 1]
-  // console.log(start)   // fix: atm, doesn't work for black pieces
-
-  // //isolate piece
-  // piece = start.getElementsByTagName('i')[0];
-  // console.log(piece)   // fix: atm, doesn't work for black pieces
-
-  // //remove piece 
-  // highlighted.forEach(cell => cell.addEventListener('click', (e) => {
-  //   const destination = e.target;
-  //   start.removeChild(piece)
-  //   destination.appendChild(piece)
-  //   removeHighlight()
-  // }))
-
-}
-
-function removeHighlight() {
-  highlighted.forEach(cell => cell.classList.remove('highlight'))
+  //remove the highlight class from all cells and also remove their event listeners
+  cell.classList.remove('highlight')
+  possibleMoves.forEach(coord => document.querySelector(`${coord}`).classList.remove('highlight'))
 }
 
 //Return array of cells a piece can move to
