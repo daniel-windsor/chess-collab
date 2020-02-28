@@ -124,13 +124,9 @@ function highlight(evt) {
     return;
   }
 
-  //remove previous highlights
-  highlighted = document.querySelectorAll('.highlight')
-  highlighted.forEach(x => x.classList.remove('highlight'))
-
   //stores selected cell on which highlights/possible moves is based
-  let cell = evt.target
-  if (cell.tagName === "I") {
+  let cell = evt.target.parentNode
+  if (cell.tagName === "i") {
     cell = evt.target.parentNode
   }
 
@@ -155,7 +151,12 @@ function highlight(evt) {
 
 function movePiece(evt) {
   const originalCell = document.querySelector('.selected')
+
   const destinationCell = evt.target
+  if (destinationCell.tagName === "i") {
+    destinationCell = evt.target.parentNode
+  }
+
   console.log('destinationCell', destinationCell)
 
   //when a destinationCell is occupied, the click must not select the occupying piece, but the cell itself
@@ -175,7 +176,7 @@ function removeHighlight() {
   }
 
   const highlighted = document.querySelectorAll('.highlight')
-  highlighted.forEach(function(el) {
+  highlighted.forEach(function (el) {
     el.classList.remove('highlight')
     el.removeEventListener('click', movePiece)
   })
@@ -381,6 +382,8 @@ function resetBoard() {
   while (items.length > 0) {
     items[0].parentNode.removeChild(items[0])
   }
+
+  removeHighlight()
 
   populateBoard()
 }
