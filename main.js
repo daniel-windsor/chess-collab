@@ -69,7 +69,10 @@ function startGame() {
   generateBoard()
 
   populateBoard()
+
+  document.querySelector('.button').addEventListener('click', resetBoard)
 }
+
 //Puts the pieces on the board
 function populateBoard() {
 
@@ -131,8 +134,16 @@ function highlight(evt) {
     cell = evt.target.parentNode
   }
 
-  //highlight selected
-  cell.classList.add('highlight')
+  // allow for toggling of the selected piece
+  if (cell.classList.contains('selected')) {
+    removeHighlight(evt)
+    return
+  }
+
+  removeHighlight(evt)
+
+  //mark selected
+  cell.classList.add('selected')
 
   const possibleMoves = getMoves(evt.target)
   //if cell exists, highlight it
@@ -142,7 +153,7 @@ function highlight(evt) {
   })
 }
 
-function movePiece (cell, possibleMoves, evt) {
+function movePiece(cell, possibleMoves, evt) {
   const destinationCell = evt.target
   console.log('destinationCell', destinationCell)
 
@@ -156,6 +167,16 @@ function movePiece (cell, possibleMoves, evt) {
   //remove the highlight class from all cells and also remove their event listeners
   cell.classList.remove('highlight')
   possibleMoves.forEach(coord => document.querySelector(`${coord}`).classList.remove('highlight'))
+
+}
+
+function removeHighlight(evt) {
+  if (document.querySelector('.selected')) {
+    document.querySelector('.selected').classList.remove('selected')
+  }
+
+  const highlighted = document.querySelectorAll('.highlight')
+  highlighted.forEach(x => x.classList.remove('highlight'))
 }
 
 //Return array of cells a piece can move to
@@ -336,4 +357,28 @@ function filterMaxMoves(arr, colour) {
   }
 
   return finalArray
+}
+
+//Move capture piece to side box
+function capturePiece() { //Need to pass in some details about the captured piece
+  //get type and colour of piece
+  const colour = ""
+
+  const box = document.querySelector(`.box.${colour}`)
+  const node = document.createElement('div')
+  node.classList.add('sub-box')
+  node.innerHTML = "" //replace with object reference
+
+  box.appendChild(node)
+}
+
+function resetBoard() {
+
+  let items = document.getElementsByClassName('fas')
+
+  while (items.length > 0) {
+    items[0].parentNode.removeChild(items[0])
+  }
+
+  populateBoard()
 }
