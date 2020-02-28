@@ -125,6 +125,13 @@ function highlight(evt) {
     return;
   }
 
+  if (evt.target.parentNode.classList.contains('highlight')) {
+    const highlighted = document.querySelectorAll('.highlight')
+    highlighted.forEach(x => x.classList.remove('highlight'))
+    return
+  }
+
+
   //remove previous highlights
   const highlighted = document.querySelectorAll('.highlight')
   highlighted.forEach(x => x.classList.remove('highlight'))
@@ -337,7 +344,7 @@ function resetBoard() {
 
   let items = document.getElementsByClassName('fas')
 
-  while(items.length > 0) {
+  while (items.length > 0) {
     items[0].parentNode.removeChild(items[0])
   }
 
