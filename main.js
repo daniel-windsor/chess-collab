@@ -125,19 +125,16 @@ function highlight(evt) {
     return;
   }
 
-  if (evt.target.parentNode.classList.contains('highlight')) {
-    const highlighted = document.querySelectorAll('.highlight')
-    highlighted.forEach(x => x.classList.remove('highlight'))
+  // allow for toggling of the selected piece
+  if (evt.target.parentNode.classList.contains('selected')) {
+    removeHighlight(evt)
     return
   }
 
+  removeHighlight(evt)
 
-  //remove previous highlights
-  const highlighted = document.querySelectorAll('.highlight')
-  highlighted.forEach(x => x.classList.remove('highlight'))
-
-  //highlight selected
-  evt.target.parentNode.classList.add('highlight')
+  //mark selected
+  evt.target.parentNode.classList.add('selected')
 
   const possibleMoves = getMoves(evt.target)
 
@@ -145,6 +142,15 @@ function highlight(evt) {
   possibleMoves.forEach(coord => {
     document.querySelector(coord).classList.add('highlight')
   })
+}
+
+function removeHighlight(evt) {
+  if (document.querySelector('.selected')) {
+    document.querySelector('.selected').classList.remove('selected')
+  }
+
+  const highlighted = document.querySelectorAll('.highlight')
+  highlighted.forEach(x => x.classList.remove('highlight'))
 }
 
 //Return array of cells a piece can move to
