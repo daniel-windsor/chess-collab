@@ -69,7 +69,10 @@ function startGame() {
   generateBoard()
 
   populateBoard()
+
+  document.querySelector('.button').addEventListener('click', resetBoard)
 }
+
 //Puts the pieces on the board
 function populateBoard() {
 
@@ -121,6 +124,13 @@ function highlight(evt) {
   if (!evt.target.classList.contains('fas')) {
     return;
   }
+
+  if (evt.target.parentNode.classList.contains('highlight')) {
+    const highlighted = document.querySelectorAll('.highlight')
+    highlighted.forEach(x => x.classList.remove('highlight'))
+    return
+  }
+
 
   //remove previous highlights
   const highlighted = document.querySelectorAll('.highlight')
@@ -315,4 +325,28 @@ function filterMaxMoves(arr, colour) {
   }
 
   return finalArray
+}
+
+//Move capture piece to side box
+function capturePiece() { //Need to pass in some details about the captured piece
+  //get type and colour of piece
+  const colour = ""
+
+  const box = document.querySelector(`.box.${colour}`)
+  const node = document.createElement('div')
+  node.classList.add('sub-box')
+  node.innerHTML = "" //replace with object reference
+
+  box.appendChild(node)
+}
+
+function resetBoard() {
+
+  let items = document.getElementsByClassName('fas')
+
+  while (items.length > 0) {
+    items[0].parentNode.removeChild(items[0])
+  }
+
+  populateBoard()
 }

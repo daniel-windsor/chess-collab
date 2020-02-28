@@ -9,12 +9,58 @@
 
 body {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 0px;
   height: 100vh;
   width: 100vw;
   background-color: var(--main-color);
+}
+
+h1 {
+  font-family: 'Parisienne';
+  font-size: 4em;
+  margin: 0px;
+  color: var(--white-square);
+  position: absolute;
+  top: 25px;
+  left: 25px;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+}
+
+.box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  height: 520px;
+  width: 130px;
+  margin: 50px;
+  border: 10px solid var(--text-color);
+}
+
+.sub-box {
+  height: 65px;
+  width: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+}
+
+.control-container {
+  position: absolute;
+  bottom: 25px;
+  right: 25px;
 }
 
 .board {
@@ -35,7 +81,6 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 70px;
-  transition: border 0.7 ease;
   border: 3px solid var(--text-color);
 }
 
@@ -61,4 +106,13 @@ body {
 
 .b {
   color: var(--black-piece);
+}
+
+.button {
+  background-color: var(--black-square);
+  color: var(--white-square);
+  border: 3px solid var(--text-color);
+  border-radius: 10px;
+  font-size: 20px;
+  padding: 10px;
 }
