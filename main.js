@@ -8,7 +8,7 @@ const pieces = {
       icon: "<i class='fas fa-chess-pawn w'</i>"
     },
     black: {
-      starting: [".c1x0", ".c1x1", ".c1x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
+      starting: [".c1x0", ".c1x1", ".c5x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
       icon: '<i class="fas fa-chess-pawn b"</i>'
     }
   },
@@ -119,38 +119,68 @@ function cellsToNodes(boardNode, cell) {
 
 //Highlight each square a piece could move to
 function highlight(evt) {
-
   //ensures cell contains a piece
   if (!evt.target.classList.contains('fas')) {
     return;
   }
 
+  //stores selected cell on which highlights/possible moves is based
+  let cell = evt.target.parentNode
+  if (cell.tagName === "i") {
+    cell = evt.target.parentNode
+  }
+
   // allow for toggling of the selected piece
-  if (evt.target.parentNode.classList.contains('selected')) {
-    removeHighlight(evt)
+  if (cell.classList.contains('selected')) {
+    removeHighlight()
     return
   }
 
-  removeHighlight(evt)
+  removeHighlight()
 
   //mark selected
-  evt.target.parentNode.classList.add('selected')
+  cell.classList.add('selected')
 
   const possibleMoves = getMoves(evt.target)
-
   //if cell exists, highlight it
   possibleMoves.forEach(coord => {
     document.querySelector(coord).classList.add('highlight')
+    document.querySelector(coord).addEventListener('click', movePiece)
   })
 }
 
-function removeHighlight(evt) {
+function movePiece(evt) {
+  const originalCell = document.querySelector('.selected')
+
+  const destinationCell = evt.target
+  if (destinationCell.tagName === "I") {
+    destinationCell = evt.target.parentNode
+  }
+
+  //when a destinationCell is occupied, the click must not select the occupying piece, but the cell itself
+  ////////// 
+
+  if (destinationCell.children[0]) {
+    capturePiece(destinationCell)
+  }
+
+  //remove the child on the (home)cell, place in destinationCell
+  const removedPiece = originalCell.removeChild(originalCell.children[0])
+  destinationCell.append(removedPiece)
+
+  removeHighlight()
+}
+
+function removeHighlight() {
   if (document.querySelector('.selected')) {
     document.querySelector('.selected').classList.remove('selected')
   }
 
   const highlighted = document.querySelectorAll('.highlight')
-  highlighted.forEach(x => x.classList.remove('highlight'))
+  highlighted.forEach(function (el) {
+    el.classList.remove('highlight')
+    el.removeEventListener('click', movePiece)
+  })
 }
 
 //Return array of cells a piece can move to
@@ -334,25 +364,36 @@ function filterMaxMoves(arr, colour) {
 }
 
 //Move capture piece to side box
-function capturePiece() { //Need to pass in some details about the captured piece
+function capturePiece(cell) { //Need to pass in some details about the captured piece
   //get type and colour of piece
-  const colour = ""
+  const colour = cell.children[0].classList.contains('w') ? 'white' : 'black'
+  console.log(colour)
 
   const box = document.querySelector(`.box.${colour}`)
   const node = document.createElement('div')
-  node.classList.add('sub-box')
-  node.innerHTML = "" //replace with object reference
+  const child = cell.children[0]
 
+  node.classList.add('sub-box')
+
+  node.appendChild(child)
   box.appendChild(node)
 }
 
 function resetBoard() {
 
-  let items = document.getElementsByClassName('fas')
+  const boardItems = document.getElementsByClassName('fas')
 
-  while (items.length > 0) {
-    items[0].parentNode.removeChild(items[0])
+  while (boardItems.length > 0) {
+    boardItems[0].parentNode.removeChild(boardItems[0])
   }
+
+  const boxItems = document.getElementsByClassName('sub-box')
+
+  while (boxItems.length > 0){
+    boxItems[0].parentNode.removeChild(boxItems[0])
+  }
+
+  removeHighlight()
 
   populateBoard()
 }
