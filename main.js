@@ -5,7 +5,7 @@ const pieces = {
   pawn: {
     white: {
       starting: [".c6x0", ".c6x1", ".c6x2", ".c6x3", ".c6x4", ".c6x5", ".c6x6", ".c6x7"],
-      icon: "<i class='fas fa-chess-pawn w'</i>"
+      icon: '<i class="fas fa-chess-pawn w" draggable="true"</i>'
     },
     black: {
       starting: [".c1x0", ".c1x1", ".c5x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],

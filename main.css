@@ -1,3 +1,9 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 :root {
   --black-square: #25282A;
   --black-piece: #3F5350;
@@ -21,11 +27,13 @@ body {
 h1 {
   font-family: 'Parisienne';
   font-size: 4em;
-  margin: 0px;
   color: var(--white-square);
+  padding-bottom: .3em;
+  /* 
+    // had to remove absolute position so that h1 didn't cut into the board when viewing in smaller desktop screens
   position: absolute;
   top: 25px;
-  left: 25px;
+  left: 25px; */ 
 }
 
 .game-container {
@@ -39,31 +47,31 @@ h1 {
 .turn {
   width: 180px;
   font-size: 20px;
-  letter-spacing: 3px;
+  letter-spacing: 1px;
   text-align: center;
   text-transform: uppercase;
   font-family: Arial, Helvetica, sans-serif;
   background-color: var(--black-square);
   color: var(--text-color);
-  padding: 3px 0;
-  border: 3px solid var(--text-color);
+  margin: 1.5em 0;
+  padding: 4px 0;
+  border: 2px solid var(--text-color);
 }
 
 .box {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  align-content: flex-start;
+  flex-direction: column;
   flex-wrap: wrap;
+
   height: 520px;
-  width: 130px;
+  width: 140px;
   margin: 50px;
   border: 10px solid var(--text-color);
 }
 
 .sub-box {
-  height: 65px;
-  width: 65px;
+  height: 62px;
+  width: 59px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -82,14 +90,14 @@ h1 {
   align-items: center;
   align-content: center;
   flex-wrap: wrap;
-  width: 728px;
-  height: 728px;
+  width: 724px;
+  height: 724px;
   border: 10px solid var(--text-color);
 }
 
 .cell {
-  width: 85px;
-  height: 85px;
+  width: 88px;
+  height: 88px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -133,4 +141,37 @@ h1 {
   font-size: 20px;
   padding: 10px;
   cursor: pointer;
+}
+
+@media only screen and (max-width: 1260px) {
+  .game-container {
+    flex-direction: column;
+  }
+  
+  .board {
+    width: 868px;
+    height: 868px;
+  }
+
+  .cell {
+    width: 106px;
+    height: 106px;
+  }
+
+  .box {
+    height: 5.5em;
+    width: 868px;
+  }
+
+  .box:first-child {
+    margin-top: 1em;
+  }
+
+  .sub-box {
+    height: 53px;
+    width: 50px;
+    padding-top: .3em;
+  }
+
+
 }
