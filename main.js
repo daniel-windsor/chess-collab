@@ -168,11 +168,6 @@ function movePiece(evt) {
     destinationCell = evt.target.parentNode
   }
 
-<<<<<<< HEAD
-  // console.log('destinationCell', destinationCell)
-
-=======
->>>>>>> master
   //when a destinationCell is occupied, the click must not select the occupying piece, but the cell itself
   ////////// 
 
