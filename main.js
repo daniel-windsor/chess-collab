@@ -170,29 +170,38 @@ function movePiece(evt) {
   const removedPiece = originalCell.removeChild(originalCell.children[0])
   destinationCell.append(removedPiece)
 
-  checkWin(removedPiece)
+  checkForCheck(removedPiece)
 
   removeHighlight()
 }
 
-function checkWin(piece) {
+function checkForCheck(piece) {
   const allyColour = piece.classList.contains('w') ? 'w' : 'b';
-  
+
   const enemyColour = allyColour == 'w' ? 'b' : 'w'
   const enemyKing = document.querySelector(`.fa-chess-king.${enemyColour}`).parentNode
 
   const allyPieces = [...document.querySelectorAll(`.${allyColour}`)]
-  const allyMoves = allyPieces.map(el => getMoves(el))
 
-  const check = allyMoves.filter(function(el) {
-    // console.log(el)
-    // console.log(`.${enemyKing.classList[1]}`)
-    return el.includes(`.${enemyKing.classList[1]}`)
-  })
-
-  if(check[0] != null) {
-    enemyKing.classList.add('checked')
+  const checking = []
+  for (let i = 0; i < allyPieces.length; i++) {
+    let moves = getMoves(allyPieces[i])
+    if (moves.includes(`.${enemyKing.classList[1]}`)) {
+      checking.push(allyPieces[i])
+    }
   }
+
+  if (checking != null) {
+    enemyKing.classList.add('checked')
+    for (let i = 0; i < checking.length; i++) {
+      checking[i].parentNode.classList.add('checked')
+    }
+    checkMate(enemyColour, enemyKing, checking)
+  }
+}
+
+function checkMate(enemyColour, enemyKing, checking) {
+  
 }
 
 function removeHighlight() {
@@ -413,7 +422,7 @@ function resetBoard() {
 
   const boxItems = document.getElementsByClassName('sub-box')
 
-  while (boxItems.length > 0){
+  while (boxItems.length > 0) {
     boxItems[0].parentNode.removeChild(boxItems[0])
   }
 
