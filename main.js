@@ -170,7 +170,23 @@ function movePiece(evt) {
   const removedPiece = originalCell.removeChild(originalCell.children[0])
   destinationCell.append(removedPiece)
 
+  checkWin(removedPiece)
+
   removeHighlight()
+}
+
+function checkWin(piece) {
+  const allyColour = piece.classList.contains('w') ? 'w' : 'b';
+  
+  const enemyColour = piece == 'w' ? 'b' : 'w'
+  const enemyKing = document.querySelector(`.fa-chess-king.${enemyColour}`)
+
+  const allyPieces = [...document.querySelectorAll(`.${allyColour}`)]
+  const allyMoves = allyPieces.map(el => getMoves(el))
+
+  console.log(allyPieces)
+  console.log(allyMoves)
+
 }
 
 function removeHighlight() {
