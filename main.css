@@ -161,6 +161,7 @@ h1 {
   .box {
     height: 5.5em;
     width: 868px;
+    flex-direction: row;
   }
 
   .box:first-child {
