@@ -180,8 +180,16 @@ function movePiece(evt) {
   destinationCell.append(removedPiece)
 
   removeHighlight()
-  
+
+  //toggles turn
   turn.whiteTurn = !turn.whiteTurn
+
+  //displays turn on UI
+  const turnBox = document.querySelector('.turn')
+
+  turn.whiteTurn 
+    ? turnBox.innerHTML = 'Turn: White'
+    : turnBox.innerHTML = 'Turn: Black'
 }
 
 function removeHighlight() {
