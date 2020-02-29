@@ -179,9 +179,9 @@ function movePiece(evt) {
   const removedPiece = originalCell.removeChild(originalCell.children[0])
   destinationCell.append(removedPiece)
 
-  checkForCheck(removedPiece)
-
   removeHighlight()
+
+  checkForCheck(removedPiece)
 
   //toggles turn
   turn.whiteTurn = !turn.whiteTurn
@@ -189,9 +189,9 @@ function movePiece(evt) {
   //displays turn on UI
   const turnBox = document.querySelector('.turn')
 
-  turn.whiteTurn 
-    ? turnBox.innerHTML = 'Turn: White'
-    : turnBox.innerHTML = 'Turn: Black'
+  turn.whiteTurn ?
+    turnBox.innerHTML = 'Turn: White' :
+    turnBox.innerHTML = 'Turn: Black'
 }
 
 function checkForCheck(piece) {
@@ -204,28 +204,40 @@ function checkForCheck(piece) {
 
   const checking = []
   for (let i = 0; i < allyPieces.length; i++) {
+    console.log(allyPieces[i])
     let moves = getMoves(allyPieces[i])
     if (moves.includes(`.${enemyKing.classList[1]}`)) {
       checking.push(allyPieces[i])
     }
   }
 
-  if (checking != null) {
+  console.log(checking)
+
+  if (checking[0] != null) {
+    console.log(checking)
     enemyKing.classList.add('checked')
     for (let i = 0; i < checking.length; i++) {
       checking[i].parentNode.classList.add('checked')
     }
     checkMate(enemyColour, enemyKing, checking)
+  } else {
+    while (document.querySelector('.checked')) {
+      document.querySelector('.checked').classList.remove('checked')
+    }
   }
 }
 
 function checkMate(enemyColour, enemyKing, checking) {
-  
+
 }
 
 function removeHighlight() {
   if (document.querySelector('.selected')) {
     document.querySelector('.selected').classList.remove('selected')
+  }
+
+  while (document.querySelector('.checked')) {
+    document.querySelector('.checked').classList.remove('checked')
   }
 
   const highlighted = document.querySelectorAll('.highlight')
@@ -237,11 +249,14 @@ function removeHighlight() {
 
 //Return array of cells a piece can move to
 function getMoves(target) {
-
   //Find row and col of selected
-  const cell = target.parentNode.className.split(' ')[1].split('')
-  const row = Number(cell[1])
-  const col = Number(cell[3])
+  let cell = target
+  if (cell.tagName === "I") {
+    cell = target.parentNode
+  }
+  const cellCoord = target.parentNode.className.split(' ')[1].split('')
+  const row = Number(cellCoord[1])
+  const col = Number(cellCoord[3])
 
   //Find type and colour of piece
   const type = target.classList[1].split('-')[2]
