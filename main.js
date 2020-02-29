@@ -157,7 +157,7 @@ function movePiece(evt) {
     destinationCell = evt.target.parentNode
   }
 
-  console.log('destinationCell', destinationCell)
+  // console.log('destinationCell', destinationCell)
 
   //when a destinationCell is occupied, the click must not select the occupying piece, but the cell itself
   ////////// 
@@ -178,15 +178,21 @@ function movePiece(evt) {
 function checkWin(piece) {
   const allyColour = piece.classList.contains('w') ? 'w' : 'b';
   
-  const enemyColour = piece == 'w' ? 'b' : 'w'
-  const enemyKing = document.querySelector(`.fa-chess-king.${enemyColour}`)
+  const enemyColour = allyColour == 'w' ? 'b' : 'w'
+  const enemyKing = document.querySelector(`.fa-chess-king.${enemyColour}`).parentNode
 
   const allyPieces = [...document.querySelectorAll(`.${allyColour}`)]
   const allyMoves = allyPieces.map(el => getMoves(el))
 
-  console.log(allyPieces)
-  console.log(allyMoves)
+  const check = allyMoves.filter(function(el) {
+    // console.log(el)
+    // console.log(`.${enemyKing.classList[1]}`)
+    return el.includes(`.${enemyKing.classList[1]}`)
+  })
 
+  if(check[0] != null) {
+    enemyKing.classList.add('checked')
+  }
 }
 
 function removeHighlight() {
