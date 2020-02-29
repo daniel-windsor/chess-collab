@@ -160,47 +160,57 @@ function movePiece(evt) {
   const movingPiece = originalCell.removeChild(originalCell.children[0]) //remove the child on the (home)cell, place in destinationCell
   destinationCell.append(movingPiece)
 
-  checkForCheck(movingPiece)
+  check()
 
   removeHighlight()
 
   turnManager(getColour(movingPiece))
 }
 
-function checkForCheck(piece) {
-  const allyColour = piece.classList.contains('w') ? 'w' : 'b';
+//Highlights pieces that check the king
+function check() {
 
-  const enemyColour = allyColour == 'w' ? 'b' : 'w'
-  const enemyKing = document.querySelector(`.fa-chess-king.${enemyColour}`).parentNode
+  const whiteKing = document.querySelector('.fa-chess-king.w').parentNode
+  const blackKing = document.querySelector('.fa-chess-king.b').parentNode
 
   const board = document.querySelector('.board')
-  const allyPieces = [...board.querySelectorAll(`.${allyColour}`)]
+  const whitePieces = [...board.querySelectorAll('.w')]
+  const blackPieces = [...board.querySelectorAll('.b')]
 
-  while (document.querySelector('.checked')) {
-    document.querySelector('.checked').classList.remove('checked')
-  }
+  const whiteCheck = checkForCheck(whitePieces, blackKing)
+  const blackCheck = checkForCheck(blackPieces, whiteKing)
 
-  const checking = []
-  for (let i = 0; i < allyPieces.length; i++) {
-    let moves = getMoves(allyPieces[i])
-    if (moves.includes(`.${enemyKing.classList[1]}`)) {
-      checking.push(allyPieces[i])
-    }
-  }
-
-  if (checking[0] != null) {
-    enemyKing.classList.add('checked')
-
-    checking.forEach(el => {
-      el.parentNode.classList.add('checked')
-    })
-    checkMate(enemyColour, enemyKing, checking)
-
-  } else {
+  if (whiteCheck[0] == null && blackCheck[0] == null) {
     while (document.querySelector('.checked')) {
       document.querySelector('.checked').classList.remove('checked')
     }
   }
+
+  if (whiteCheck[0] != null) {
+    blackKing.classList.add('checked')
+    whiteCheck.forEach(el => {
+      el.parentNode.classList.add('checked')
+    })
+  }
+
+  if (blackCheck[0] != null) {
+    whiteKing.classList.add('checked')
+    whiteCheck.forEach(el => {
+      el.parentNode.classList.add('checked')
+    })
+  }
+}
+//Returns array of pieces that check the king
+function checkForCheck(pieces, king) {
+  const checking = []
+  for (let i = 0; i < pieces.length; i++) {
+    let moves = getMoves(pieces[i])
+    if (moves.includes(`.${king.classList[1]}`)) {
+      checking.push(pieces[i])
+    }
+  }
+
+  return checking
 }
 
 function checkMate(enemyColour, enemyKing, checking) {
@@ -433,7 +443,6 @@ function getColour(piece) {
 function capturePiece(cell) {
 
   const colour = cell.children[0].classList.contains('w') ? 'white' : 'black' //get type and colour of piece
-  console.log(colour)
 
   const box = document.querySelector(`.box.${colour}`)
   const node = document.createElement('div')
