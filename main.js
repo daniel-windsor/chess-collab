@@ -64,22 +64,18 @@ const pieces = {
   }
 }
 
-let turn = {
-  whiteTurn: true
-}
-
 function startGame() {
-
   generateBoard()
 
   populateBoard()
 
   document.querySelector('.button').addEventListener('click', resetBoard)
+
+  turnManager('b')
 }
 
 //Puts the pieces on the board
 function populateBoard() {
-
   for (let piece in pieces) {
     for (let i = 0; i < (pieces[piece].white.starting).length; i++) {
       document.querySelector(pieces[piece].white.starting[i]).innerHTML = pieces[piece].white.icon
@@ -123,38 +119,27 @@ function cellsToNodes(boardNode, cell) {
 
 //Highlight each square a piece could move to
 function highlight(evt) {
-  //ensures cell contains a piece
-  if (!evt.target.classList.contains('fas')) {
+  if (!evt.target.classList.contains('fas')) { //ensures cell contains a piece
     return;
   }
 
-  //disables black piece selection if white's turn
-  let piece = evt.target
-  if (turn.whiteTurn && piece.classList.contains('b')) return;
-
-  //disables white piece selection if black's turn
-  if (!turn.whiteTurn && piece.classList.contains('w')) return;
-
-  //stores selected cell on which highlights/possible moves is based
-  let cell = evt.target.parentNode
+  let cell = evt.target.parentNode //stores selected cell on which highlights/possible moves is based
   if (cell.tagName === "i") {
     cell = evt.target.parentNode
   }
 
-  // allow for toggling of the selected piece
-  if (cell.classList.contains('selected')) {
+  if (cell.classList.contains('selected')) { // allow for toggling of the selected piece
     removeHighlight()
     return
   }
 
   removeHighlight()
 
-  //mark selected
-  cell.classList.add('selected')
+  cell.classList.add('selected') //mark selected
 
   const possibleMoves = getMoves(evt.target)
-  //if cell exists, highlight it
-  possibleMoves.forEach(coord => {
+
+  possibleMoves.forEach(coord => { //if cell exists, highlight it
     document.querySelector(coord).classList.add('highlight')
     document.querySelector(coord).addEventListener('click', movePiece)
   })
@@ -168,28 +153,17 @@ function movePiece(evt) {
     destinationCell = evt.target.parentNode
   }
 
-  //when a destinationCell is occupied, the click must not select the occupying piece, but the cell itself
-  ////////// 
-
   if (destinationCell.children[0]) {
     capturePiece(destinationCell)
   }
 
-  //remove the child on the (home)cell, place in destinationCell
-  const removedPiece = originalCell.removeChild(originalCell.children[0])
-  destinationCell.append(removedPiece)
+
+  const movingPiece = originalCell.removeChild(originalCell.children[0]) //remove the child on the (home)cell, place in destinationCell
+  destinationCell.append(movingPiece)
 
   removeHighlight()
 
-  //toggles turn
-  turn.whiteTurn = !turn.whiteTurn
-
-  //displays turn on UI
-  const turnBox = document.querySelector('.turn')
-
-  turn.whiteTurn 
-    ? turnBox.innerHTML = 'Turn: White'
-    : turnBox.innerHTML = 'Turn: Black'
+  turnManager(getColour(movingPiece))
 }
 
 function removeHighlight() {
@@ -214,7 +188,7 @@ function getMoves(target) {
 
   //Find type and colour of piece
   const type = target.classList[1].split('-')[2]
-  const colour = target.classList.contains('b') ? 'b' : 'w'
+  const colour = getColour(target)
 
   const possibleMoves = []
 
@@ -253,7 +227,7 @@ function pawnMoves(row, col, colour) {
   }
 
   if ((colour == "w" && row == 6) || (colour == "b" && row == 1)) {
-    if (!document.querySelector(`.c${row+direction*2}x${col}`).children[0]) {
+    if (!document.querySelector(`.c${row+direction*2}x${col}`).children[0] && !document.querySelector(`.c${row+direction}x${col}`).children[0]) {
       arr.push(`.c${row+(direction*2)}x${col}`)
     }
   }
@@ -384,10 +358,37 @@ function filterMaxMoves(arr, colour) {
   return finalArray
 }
 
+function turnManager(colour) {
+  const newColour = colour == 'w' ? 'b' : 'w'
+
+  //displays turn on UI
+  const turnBox = document.querySelector('.turn')
+
+  if (newColour == 'w') {
+    turnBox.innerHTML = 'Turn: White'
+  } else {
+    turnBox.innerHTML = 'Turn: Black'
+  }
+
+  //Changes which pieces can be selected
+  document.querySelectorAll('.non-interactive').forEach(el => {
+    el.classList.remove('non-interactive');
+  })
+
+  document.querySelectorAll(`.${colour}`).forEach(el => {
+    el.classList.add('non-interactive');
+  })
+
+}
+
+function getColour(piece) {
+  return colour = piece.classList.contains('w') ? 'w' : 'b'
+}
+
 //Move capture piece to side box
-function capturePiece(cell) { //Need to pass in some details about the captured piece
-  //get type and colour of piece
-  const colour = cell.children[0].classList.contains('w') ? 'white' : 'black'
+function capturePiece(cell) {
+
+  const colour = cell.children[0].classList.contains('w') ? 'white' : 'black' //get type and colour of piece
   console.log(colour)
 
   const box = document.querySelector(`.box.${colour}`)
@@ -401,7 +402,6 @@ function capturePiece(cell) { //Need to pass in some details about the captured 
 }
 
 function resetBoard() {
-
   const boardItems = document.getElementsByClassName('fas')
 
   while (boardItems.length > 0) {
@@ -410,11 +410,13 @@ function resetBoard() {
 
   const boxItems = document.getElementsByClassName('sub-box')
 
-  while (boxItems.length > 0){
+  while (boxItems.length > 0) {
     boxItems[0].parentNode.removeChild(boxItems[0])
   }
 
   removeHighlight()
 
   populateBoard()
+
+  turnManager('b')
 }
