@@ -112,6 +112,10 @@ h1 {
   cursor: pointer;
 }
 
+.non-interactive {
+  pointer-events: none;
+}
+
 .white {
   background-color: var(--white-square);
 }
