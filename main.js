@@ -160,15 +160,15 @@ function movePiece(evt) {
   const movingPiece = originalCell.removeChild(originalCell.children[0]) //remove the child on the (home)cell, place in destinationCell
   destinationCell.append(movingPiece)
 
-  check()
+  winCondition()
 
   removeHighlight()
 
   turnManager(getColour(movingPiece))
 }
 
-//Highlights pieces that check the king
-function check() {
+//Did you win?
+function winCondition() {
 
   const whiteKing = document.querySelector('.fa-chess-king.w').parentNode
   const blackKing = document.querySelector('.fa-chess-king.b').parentNode
@@ -186,20 +186,23 @@ function check() {
     }
   }
 
-  if (whiteCheck[0] != null) {
+  if (whiteCheck[0] != null) {    //If black king is checked
     blackKing.classList.add('checked')
     whiteCheck.forEach(el => {
       el.parentNode.classList.add('checked')
     })
+    checkForCheckMate(blackKing, blackPieces, whiteCheck)
   }
 
-  if (blackCheck[0] != null) {
+  if (blackCheck[0] != null) {    //If white king is checked
     whiteKing.classList.add('checked')
     whiteCheck.forEach(el => {
       el.parentNode.classList.add('checked')
     })
+    checkForCheckMate(whiteKing, whitePieces, blackCheck)
   }
 }
+
 //Returns array of pieces that check the king
 function checkForCheck(pieces, king) {
   const checking = []
@@ -213,7 +216,19 @@ function checkForCheck(pieces, king) {
   return checking
 }
 
-function checkMate(enemyColour, enemyKing, checking) {
+function checkForCheckMate(king, allyPieces, enemyPieces) {
+  const kingCell = king
+  enemyCells = enemyPieces.map(el => el.parentNode.classList[1])
+
+
+
+
+  
+  const kingMoves = getMoves(kingCell.firstChild)
+
+  
+
+  console.log(enemyCells)
 
 }
 
