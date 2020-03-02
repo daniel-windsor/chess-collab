@@ -55,12 +55,11 @@ h1 {
 
 .box {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   align-content: flex-start;
   flex-wrap: wrap;
-
   height: 520px;
   width: 142px;
   margin: 50px;

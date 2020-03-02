@@ -1,3 +1,44 @@
+//Return array of cells a piece can move to
+function getMoves(target) {
+  //Find row and col of selected
+  let cell = target
+  if (cell.tagName === "I") {
+    cell = target.parentNode
+  }
+  const cellCoord = target.parentNode.className.split(' ')[1].split('')
+  const row = Number(cellCoord[1])
+  const col = Number(cellCoord[3])
+
+  //Find type and colour of piece
+  const type = target.classList[1].split('-')[2]
+  const colour = getColour(target)
+
+  const possibleMoves = []
+
+  switch (type) {
+    case "pawn":
+      possibleMoves.push(...pawnMoves(row, col, colour))
+      break;
+    case "rook":
+      possibleMoves.push(...maxStraight(row, col, colour))
+      break;
+    case "knight":
+      possibleMoves.push(...knightMoves(row, col, colour))
+      break;
+    case "bishop":
+      possibleMoves.push(...maxDiagonal(row, col, colour))
+      break;
+    case "queen":
+      possibleMoves.push(...maxStraight(row, col, colour), ...maxDiagonal(row, col, colour))
+      break;
+    case "king":
+      possibleMoves.push(...kingMoves(row, col, colour))
+      break;
+  }
+
+  return possibleMoves;
+}
+
 //Handles pawn movement
 function pawnMoves(row, col, colour) {
     let arr = []
@@ -72,5 +113,104 @@ function kingMoves(row, col, colour) {
         .filter(el => !document.querySelector(el).children[0] || !document.querySelector(el).children[0].classList.contains(colour))
 
     return moves
+}
+
+//Finds how far a piece can go straight
+function maxStraight(row, col, colour) {
+
+  const moves = {
+    north: [],
+    south: [],
+    east: [],
+    west: []
+  }
+
+  for (let i = 1; i < 8; i++) { //Gets coords for all cells within 8 cells in all directions
+    moves.north.push(`.c${row-i}x${col}`)
+    moves.south.push(`.c${row+i}x${col}`)
+    moves.east.push(`.c${row}x${col+i}`)
+    moves.west.push(`.c${row}x${col-i}`)
+  }
+
+  return [...filterMaxMoves(moves, colour)]
+}
+
+//Finds how far a piece can go diagonally
+function maxDiagonal(row, col, colour) {
+
+  const moves = {
+    north: [], //northeast     -- can't rename these because it breaks the filter
+    east: [], //southeast
+    south: [], //southwest
+    west: [] //northwest
+  }
+
+  for (let i = 1; i < 8; i++) {
+    moves.north.push(`.c${row-i}x${col+i}`)
+    moves.east.push(`.c${row+i}x${col+i}`)
+    moves.south.push(`.c${row+i}x${col-i}`)
+    moves.west.push(`.c${row-i}x${col-i}`)
+  }
+
+  return [...filterMaxMoves(moves, colour)]
+}
+
+//Ensures pieces don't try to move where they aren't allowed
+function filterMaxMoves(arr, colour) {
+
+  const moves = {
+    north: [],
+    south: [],
+    east: [],
+    west: []
+  }
+
+  const finalArray = []
+
+  for (let move in arr) {
+    moves[move].push(...arr[move].filter(el => document.querySelector(el))) //Ensures no cells are out of bounds
+
+    let index = moves[move].findIndex(el => document.querySelector(el).children[0]) //Finds index of first cell with a child
+
+    if (index != -1) {
+      let childColour = document.querySelector(moves[move][index]).children[0].classList.contains('w') ? 'w' : 'b'
+      if (childColour != colour) {
+        finalArray.push(...moves[move].slice(0, index + 1))
+      } else {
+        finalArray.push(...moves[move].slice(0, index))
+      }
+    } else {
+      finalArray.push(...moves[move])
+    }
+  }
+
+  return finalArray
+}
+
+function movePiece(evt) {
+  const originalCell = document.querySelector('.selected')
+
+  const destinationCell = evt.target
+  if (destinationCell.tagName === "I") {
+    destinationCell = evt.target.parentNode
+  }
+
+  if (destinationCell.children[0]) {
+    capturePiece(destinationCell)
+  }
+
+  const movingPiece = originalCell.removeChild(originalCell.children[0]) //remove the child on the (home)cell, place in destinationCell
+  destinationCell.append(movingPiece)
+
+  removeHighlight()
+
+  if (movingPiece.classList.contains('fa-chess-pawn')) {
+    promoteMe(destinationCell)
+  }
+
+  winCondition()
+
+  turnManager(getColour(movingPiece))
+
 }
 
