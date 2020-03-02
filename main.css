@@ -51,12 +51,12 @@ h1 {
 
 .box {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   align-content: flex-start;
   flex-wrap: wrap;
   height: 520px;
-  width: 130px;
+  width: 142px;
   margin: 50px;
   border: 10px solid var(--text-color);
 }
@@ -98,12 +98,17 @@ h1 {
 }
 
 .highlight {
-  border: 3px solid red;
+  border: 3px solid green;
   cursor: pointer;
 }
 
 .selected {
   border: 3px solid blue;
+  cursor: pointer;
+}
+
+.checked {
+  border: 3px solid red;
   cursor: pointer;
 }
 

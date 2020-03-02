@@ -8,7 +8,7 @@ const pieces = {
       icon: "<i class='fas fa-chess-pawn w'</i>"
     },
     black: {
-      starting: [".c1x0", ".c1x1", ".c5x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
+      starting: [".c1x0", ".c1x1", ".c1x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
       icon: '<i class="fas fa-chess-pawn b"</i>'
     }
   },
@@ -34,7 +34,7 @@ const pieces = {
   },
   bishop: {
     white: {
-      starting: [".c4x5", ".c7x5"],
+      starting: [".c7x2", ".c7x5"],
       icon: '<i class="fas fa-chess-bishop w"></i>'
     },
     black: {
@@ -44,7 +44,7 @@ const pieces = {
   },
   queen: {
     white: {
-      starting: [".c4x4"],
+      starting: [".c7x3"],
       icon: '<i class="fas fa-chess-queen w"></i>'
     },
     black: {
@@ -157,14 +157,101 @@ function movePiece(evt) {
     capturePiece(destinationCell)
   }
 
-
   const movingPiece = originalCell.removeChild(originalCell.children[0]) //remove the child on the (home)cell, place in destinationCell
   destinationCell.append(movingPiece)
 
   removeHighlight()
 
+  if (movingPiece.classList.contains('fa-chess-pawn')) {
+    promoteMe(destinationCell)
+  }
+
+  winCondition()
+
   turnManager(getColour(movingPiece))
+
 }
+
+//Did you win?
+function winCondition() {
+
+  while (document.querySelector('.checked')) {
+    document.querySelector('.checked').classList.remove('checked')
+  }
+
+  const whiteKing = document.querySelector('.fa-chess-king.w').parentNode
+  const blackKing = document.querySelector('.fa-chess-king.b').parentNode
+
+  const board = document.querySelector('.board')
+  const whitePieces = [...board.querySelectorAll('.w')]
+  const blackPieces = [...board.querySelectorAll('.b')]
+
+  const whiteCheck = checkForCheck(whitePieces, blackKing)
+  const blackCheck = checkForCheck(blackPieces, whiteKing)
+
+  if (whiteCheck[0] != null) { //If black king is checked
+    blackKing.classList.add('checked')
+    whiteCheck.forEach(el => {
+      el.parentNode.classList.add('checked')
+    })
+    checkForCheckMate(blackKing, blackPieces, whiteCheck)
+  }
+
+  if (blackCheck[0] != null) { //If white king is checked
+    whiteKing.classList.add('checked')
+    whiteCheck.forEach(el => {
+      el.parentNode.classList.add('checked')
+    })
+    checkForCheckMate(whiteKing, whitePieces, blackCheck)
+  }
+}
+
+//Returns array of pieces that check the king
+function checkForCheck(pieces, king) {
+  const checking = []
+  for (let i = 0; i < pieces.length; i++) {
+    let moves = getMoves(pieces[i])
+    if (moves.includes(`.${king.classList[1]}`)) {
+      checking.push(pieces[i])
+    }
+  }
+
+  return checking
+}
+
+function checkForCheckMate(king, allyPieces, enemyPieces) {
+  const kingCell = king
+  enemyCells = enemyPieces.map(el => el.parentNode.classList[1])
+
+  const kingMoves = getMoves(kingCell.firstChild)
+
+}
+
+function promoteMe(destinationCell) {
+  const colour = getColour(destinationCell.firstChild)
+  const colourLong = colour == 'w' ? 'white' : 'black'
+
+  const cellCoord = destinationCell.className.split(' ')[1].split('')
+  const row = Number(cellCoord[1])
+
+  if (row == 0 || row == 7) {
+    const pieces = document.querySelectorAll(`.${colourLong} .sub-box`)
+
+    pieces.forEach(function (el) {
+      el.classList.add('highlight')
+
+      el.addEventListener('click', function (evt) {
+        console.log(evt.target)
+        capturePiece(destinationCell)
+        evt.target.remove();
+        destinationCell.appendChild(evt.target.children[0])
+
+        removeHighlight()
+      })
+    })
+  }
+}
+
 
 function removeHighlight() {
   if (document.querySelector('.selected')) {
@@ -180,11 +267,14 @@ function removeHighlight() {
 
 //Return array of cells a piece can move to
 function getMoves(target) {
-
   //Find row and col of selected
-  const cell = target.parentNode.className.split(' ')[1].split('')
-  const row = Number(cell[1])
-  const col = Number(cell[3])
+  let cell = target
+  if (cell.tagName === "I") {
+    cell = target.parentNode
+  }
+  const cellCoord = target.parentNode.className.split(' ')[1].split('')
+  const row = Number(cellCoord[1])
+  const col = Number(cellCoord[3])
 
   //Find type and colour of piece
   const type = target.classList[1].split('-')[2]
@@ -220,6 +310,10 @@ function getMoves(target) {
 function pawnMoves(row, col, colour) {
   let arr = []
 
+  if (row == 0 || row == 7) { //Stops error when pawn reaches other side
+    return arr
+  }
+
   let direction = colour == "w" ? -1 : 1 //find direction pawn needs to move in based on colour
 
   if (!document.querySelector(`.c${row+direction}x${col}`).children[0]) {
@@ -243,6 +337,8 @@ function pawnMoves(row, col, colour) {
       }
     }
   }
+
+
   return arr
 }
 
@@ -389,7 +485,6 @@ function getColour(piece) {
 function capturePiece(cell) {
 
   const colour = cell.children[0].classList.contains('w') ? 'white' : 'black' //get type and colour of piece
-  console.log(colour)
 
   const box = document.querySelector(`.box.${colour}`)
   const node = document.createElement('div')
@@ -415,6 +510,10 @@ function resetBoard() {
   }
 
   removeHighlight()
+
+  while (document.querySelector('.checked')) {
+    document.querySelector('.checked').classList.remove('checked')
+  }
 
   populateBoard()
 
