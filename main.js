@@ -8,7 +8,7 @@ const pieces = {
       icon: "<i class='fas fa-chess-pawn w'</i>"
     },
     black: {
-      starting: [".c1x0", ".c1x1", ".c5x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
+      starting: [".c1x0", ".c1x1", ".c1x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
       icon: '<i class="fas fa-chess-pawn b"</i>'
     }
   },
@@ -34,7 +34,7 @@ const pieces = {
   },
   bishop: {
     white: {
-      starting: [".c4x5", ".c7x5"],
+      starting: [".c7x2", ".c7x5"],
       icon: '<i class="fas fa-chess-bishop w"></i>'
     },
     black: {
@@ -44,7 +44,7 @@ const pieces = {
   },
   queen: {
     white: {
-      starting: [".c4x4"],
+      starting: [".c7x3"],
       icon: '<i class="fas fa-chess-queen w"></i>'
     },
     black: {
@@ -160,15 +160,24 @@ function movePiece(evt) {
   const movingPiece = originalCell.removeChild(originalCell.children[0]) //remove the child on the (home)cell, place in destinationCell
   destinationCell.append(movingPiece)
 
-  winCondition()
-
   removeHighlight()
 
+  if (movingPiece.classList.contains('fa-chess-pawn')) {
+    promoteMe(destinationCell)
+  }
+
+  winCondition()
+
   turnManager(getColour(movingPiece))
+
 }
 
 //Did you win?
 function winCondition() {
+
+  while (document.querySelector('.checked')) {
+    document.querySelector('.checked').classList.remove('checked')
+  }
 
   const whiteKing = document.querySelector('.fa-chess-king.w').parentNode
   const blackKing = document.querySelector('.fa-chess-king.b').parentNode
@@ -180,13 +189,7 @@ function winCondition() {
   const whiteCheck = checkForCheck(whitePieces, blackKing)
   const blackCheck = checkForCheck(blackPieces, whiteKing)
 
-  if (whiteCheck[0] == null && blackCheck[0] == null) {
-    while (document.querySelector('.checked')) {
-      document.querySelector('.checked').classList.remove('checked')
-    }
-  }
-
-  if (whiteCheck[0] != null) {    //If black king is checked
+  if (whiteCheck[0] != null) { //If black king is checked
     blackKing.classList.add('checked')
     whiteCheck.forEach(el => {
       el.parentNode.classList.add('checked')
@@ -194,7 +197,7 @@ function winCondition() {
     checkForCheckMate(blackKing, blackPieces, whiteCheck)
   }
 
-  if (blackCheck[0] != null) {    //If white king is checked
+  if (blackCheck[0] != null) { //If white king is checked
     whiteKing.classList.add('checked')
     whiteCheck.forEach(el => {
       el.parentNode.classList.add('checked')
@@ -220,17 +223,35 @@ function checkForCheckMate(king, allyPieces, enemyPieces) {
   const kingCell = king
   enemyCells = enemyPieces.map(el => el.parentNode.classList[1])
 
-
-
-
-  
   const kingMoves = getMoves(kingCell.firstChild)
 
-  
-
-  console.log(enemyCells)
-
 }
+
+function promoteMe(destinationCell) {
+  const colour = getColour(destinationCell.firstChild)
+  const colourLong = colour == 'w' ? 'white' : 'black'
+
+  const cellCoord = destinationCell.className.split(' ')[1].split('')
+  const row = Number(cellCoord[1])
+
+  if (row == 0 || row == 7) {
+    const pieces = document.querySelectorAll(`.${colourLong} .sub-box`)
+
+    pieces.forEach(function (el) {
+      el.classList.add('highlight')
+
+      el.addEventListener('click', function (evt) {
+        console.log(evt.target)
+        capturePiece(destinationCell)
+        evt.target.remove();
+        destinationCell.appendChild(evt.target.children[0])
+
+        removeHighlight()
+      })
+    })
+  }
+}
+
 
 function removeHighlight() {
   if (document.querySelector('.selected')) {
@@ -289,6 +310,10 @@ function getMoves(target) {
 function pawnMoves(row, col, colour) {
   let arr = []
 
+  if (row == 0 || row == 7) { //Stops error when pawn reaches other side
+    return arr
+  }
+
   let direction = colour == "w" ? -1 : 1 //find direction pawn needs to move in based on colour
 
   if (!document.querySelector(`.c${row+direction}x${col}`).children[0]) {
@@ -312,6 +337,8 @@ function pawnMoves(row, col, colour) {
       }
     }
   }
+
+
   return arr
 }
 
