@@ -8,7 +8,7 @@ const pieces = {
       icon: '<i class="fas fa-chess-pawn w" draggable="true"</i>'
     },
     black: {
-      starting: [".c1x0", ".c1x1", ".c5x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
+      starting: [".c1x0", ".c1x1", ".c1x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
       icon: '<i class="fas fa-chess-pawn b"</i>'
     }
   },
@@ -34,7 +34,7 @@ const pieces = {
   },
   bishop: {
     white: {
-      starting: [".c4x5", ".c7x5"],
+      starting: [".c7x2", ".c7x5"],
       icon: '<i class="fas fa-chess-bishop w"></i>'
     },
     black: {
@@ -44,7 +44,7 @@ const pieces = {
   },
   queen: {
     white: {
-      starting: [".c4x4"],
+      starting: [".c7x3"],
       icon: '<i class="fas fa-chess-queen w"></i>'
     },
     black: {
@@ -64,22 +64,18 @@ const pieces = {
   }
 }
 
-let turn = {
-  whiteTurn: true
-}
-
 function startGame() {
-
   generateBoard()
 
   populateBoard()
 
   document.querySelector('.button').addEventListener('click', resetBoard)
+
+  turnManager('b')
 }
 
 //Puts the pieces on the board
 function populateBoard() {
-
   for (let piece in pieces) {
     for (let i = 0; i < (pieces[piece].white.starting).length; i++) {
       document.querySelector(pieces[piece].white.starting[i]).innerHTML = pieces[piece].white.icon
@@ -123,38 +119,27 @@ function cellsToNodes(boardNode, cell) {
 
 //Highlight each square a piece could move to
 function highlight(evt) {
-  //ensures cell contains a piece
-  if (!evt.target.classList.contains('fas')) {
+  if (!evt.target.classList.contains('fas')) { //ensures cell contains a piece
     return;
   }
 
-  //disables black piece selection if white's turn
-  let piece = evt.target
-  if (turn.whiteTurn && piece.classList.contains('b')) return;
-
-  //disables white piece selection if black's turn
-  if (!turn.whiteTurn && piece.classList.contains('w')) return;
-
-  //stores selected cell on which highlights/possible moves is based
-  let cell = evt.target.parentNode
+  let cell = evt.target.parentNode //stores selected cell on which highlights/possible moves is based
   if (cell.tagName === "i") {
     cell = evt.target.parentNode
   }
 
-  // allow for toggling of the selected piece
-  if (cell.classList.contains('selected')) {
+  if (cell.classList.contains('selected')) { // allow for toggling of the selected piece
     removeHighlight()
     return
   }
 
   removeHighlight()
 
-  //mark selected
-  cell.classList.add('selected')
+  cell.classList.add('selected') //mark selected
 
   const possibleMoves = getMoves(evt.target)
-  //if cell exists, highlight it
-  possibleMoves.forEach(coord => {
+
+  possibleMoves.forEach(coord => { //if cell exists, highlight it
     document.querySelector(coord).classList.add('highlight')
     document.querySelector(coord).addEventListener('click', movePiece)
   })
@@ -168,29 +153,105 @@ function movePiece(evt) {
     destinationCell = evt.target.parentNode
   }
 
-  //when a destinationCell is occupied, the click must not select the occupying piece, but the cell itself
-  ////////// 
-
   if (destinationCell.children[0]) {
     capturePiece(destinationCell)
   }
 
-  //remove the child on the (home)cell, place in destinationCell
-  const removedPiece = originalCell.removeChild(originalCell.children[0])
-  destinationCell.append(removedPiece)
+  const movingPiece = originalCell.removeChild(originalCell.children[0]) //remove the child on the (home)cell, place in destinationCell
+  destinationCell.append(movingPiece)
 
   removeHighlight()
 
-  //toggles turn
-  turn.whiteTurn = !turn.whiteTurn
+  if (movingPiece.classList.contains('fa-chess-pawn')) {
+    promoteMe(destinationCell)
+  }
 
-  //displays turn on UI
-  const turnBox = document.querySelector('.turn')
+  winCondition()
 
-  turn.whiteTurn 
-    ? turnBox.innerHTML = 'Turn: White'
-    : turnBox.innerHTML = 'Turn: Black'
+  turnManager(getColour(movingPiece))
+
 }
+
+//Did you win?
+function winCondition() {
+
+  while (document.querySelector('.checked')) {
+    document.querySelector('.checked').classList.remove('checked')
+  }
+
+  const whiteKing = document.querySelector('.fa-chess-king.w').parentNode
+  const blackKing = document.querySelector('.fa-chess-king.b').parentNode
+
+  const board = document.querySelector('.board')
+  const whitePieces = [...board.querySelectorAll('.w')]
+  const blackPieces = [...board.querySelectorAll('.b')]
+
+  const whiteCheck = checkForCheck(whitePieces, blackKing)
+  const blackCheck = checkForCheck(blackPieces, whiteKing)
+
+  if (whiteCheck[0] != null) { //If black king is checked
+    blackKing.classList.add('checked')
+    whiteCheck.forEach(el => {
+      el.parentNode.classList.add('checked')
+    })
+    checkForCheckMate(blackKing, blackPieces, whiteCheck)
+  }
+
+  if (blackCheck[0] != null) { //If white king is checked
+    whiteKing.classList.add('checked')
+    whiteCheck.forEach(el => {
+      el.parentNode.classList.add('checked')
+    })
+    checkForCheckMate(whiteKing, whitePieces, blackCheck)
+  }
+}
+
+//Returns array of pieces that check the king
+function checkForCheck(pieces, king) {
+  const checking = []
+  for (let i = 0; i < pieces.length; i++) {
+    let moves = getMoves(pieces[i])
+    if (moves.includes(`.${king.classList[1]}`)) {
+      checking.push(pieces[i])
+    }
+  }
+
+  return checking
+}
+
+function checkForCheckMate(king, allyPieces, enemyPieces) {
+  const kingCell = king
+  enemyCells = enemyPieces.map(el => el.parentNode.classList[1])
+
+  const kingMoves = getMoves(kingCell.firstChild)
+
+}
+
+function promoteMe(destinationCell) {
+  const colour = getColour(destinationCell.firstChild)
+  const colourLong = colour == 'w' ? 'white' : 'black'
+
+  const cellCoord = destinationCell.className.split(' ')[1].split('')
+  const row = Number(cellCoord[1])
+
+  if (row == 0 || row == 7) {
+    const pieces = document.querySelectorAll(`.${colourLong} .sub-box`)
+
+    pieces.forEach(function (el) {
+      el.classList.add('highlight')
+
+      el.addEventListener('click', function (evt) {
+        console.log(evt.target)
+        capturePiece(destinationCell)
+        evt.target.remove();
+        destinationCell.appendChild(evt.target.children[0])
+
+        removeHighlight()
+      })
+    })
+  }
+}
+
 
 function removeHighlight() {
   if (document.querySelector('.selected')) {
@@ -206,15 +267,18 @@ function removeHighlight() {
 
 //Return array of cells a piece can move to
 function getMoves(target) {
-
   //Find row and col of selected
-  const cell = target.parentNode.className.split(' ')[1].split('')
-  const row = Number(cell[1])
-  const col = Number(cell[3])
+  let cell = target
+  if (cell.tagName === "I") {
+    cell = target.parentNode
+  }
+  const cellCoord = target.parentNode.className.split(' ')[1].split('')
+  const row = Number(cellCoord[1])
+  const col = Number(cellCoord[3])
 
   //Find type and colour of piece
   const type = target.classList[1].split('-')[2]
-  const colour = target.classList.contains('b') ? 'b' : 'w'
+  const colour = getColour(target)
 
   const possibleMoves = []
 
@@ -246,6 +310,10 @@ function getMoves(target) {
 function pawnMoves(row, col, colour) {
   let arr = []
 
+  if (row == 0 || row == 7) { //Stops error when pawn reaches other side
+    return arr
+  }
+
   let direction = colour == "w" ? -1 : 1 //find direction pawn needs to move in based on colour
 
   if (!document.querySelector(`.c${row+direction}x${col}`).children[0]) {
@@ -253,7 +321,7 @@ function pawnMoves(row, col, colour) {
   }
 
   if ((colour == "w" && row == 6) || (colour == "b" && row == 1)) {
-    if (!document.querySelector(`.c${row+direction*2}x${col}`).children[0]) {
+    if (!document.querySelector(`.c${row+direction*2}x${col}`).children[0] && !document.querySelector(`.c${row+direction}x${col}`).children[0]) {
       arr.push(`.c${row+(direction*2)}x${col}`)
     }
   }
@@ -269,6 +337,8 @@ function pawnMoves(row, col, colour) {
       }
     }
   }
+
+
   return arr
 }
 
@@ -384,11 +454,37 @@ function filterMaxMoves(arr, colour) {
   return finalArray
 }
 
+function turnManager(colour) {
+  const newColour = colour == 'w' ? 'b' : 'w'
+
+  //displays turn on UI
+  const turnBox = document.querySelector('.turn')
+
+  if (newColour == 'w') {
+    turnBox.innerHTML = 'Turn: White'
+  } else {
+    turnBox.innerHTML = 'Turn: Black'
+  }
+
+  //Changes which pieces can be selected
+  document.querySelectorAll('.non-interactive').forEach(el => {
+    el.classList.remove('non-interactive');
+  })
+
+  document.querySelectorAll(`.${colour}`).forEach(el => {
+    el.classList.add('non-interactive');
+  })
+
+}
+
+function getColour(piece) {
+  return colour = piece.classList.contains('w') ? 'w' : 'b'
+}
+
 //Move capture piece to side box
-function capturePiece(cell) { //Need to pass in some details about the captured piece
-  //get type and colour of piece
-  const colour = cell.children[0].classList.contains('w') ? 'white' : 'black'
-  console.log(colour)
+function capturePiece(cell) {
+
+  const colour = cell.children[0].classList.contains('w') ? 'white' : 'black' //get type and colour of piece
 
   const box = document.querySelector(`.box.${colour}`)
   const node = document.createElement('div')
@@ -401,7 +497,6 @@ function capturePiece(cell) { //Need to pass in some details about the captured 
 }
 
 function resetBoard() {
-
   const boardItems = document.getElementsByClassName('fas')
 
   while (boardItems.length > 0) {
@@ -410,11 +505,17 @@ function resetBoard() {
 
   const boxItems = document.getElementsByClassName('sub-box')
 
-  while (boxItems.length > 0){
+  while (boxItems.length > 0) {
     boxItems[0].parentNode.removeChild(boxItems[0])
   }
 
   removeHighlight()
 
+  while (document.querySelector('.checked')) {
+    document.querySelector('.checked').classList.remove('checked')
+  }
+
   populateBoard()
+
+  turnManager('b')
 }
