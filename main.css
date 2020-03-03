@@ -42,15 +42,14 @@ h1 {
 .turn {
   width: 180px;
   font-size: 20px;
+  font-weight: bold;
   letter-spacing: 1px;
   text-align: center;
   text-transform: uppercase;
   font-family: Arial, Helvetica, sans-serif;
-  background-color: var(--black-square);
-  color: var(--text-color);
   margin: 1.5em 0;
   padding: 4px 0;
-  border: 2px solid var(--text-color);
+  border-radius: 10px;
 }
 
 .box {
@@ -148,6 +147,19 @@ h1 {
   font-size: 20px;
   padding: 10px;
   cursor: pointer;
+}
+
+.modal-check {
+  display: none;
+  position: absolute;
+  font-size: 60px;
+  font-family: 'Parisienne';
+  font-weight: bold;
+  padding: 10px 30px 0 30px;
+  background-color: var(--black-square);
+  color: var(--white-square);
+  border: 3px solid var(--white-square);
+  border-radius: 10px;
 }
 
 @media only screen and (min-width:800px) and (max-width:1285px) {
