@@ -189,7 +189,7 @@ body {
   border-radius: 10px;
 }
 
-@media only screen and (max-width:1280px) {
+@media only screen and (max-width:1440px) {
 
   .side-panel {
     flex-direction: column;
@@ -230,55 +230,18 @@ body {
   }
 }
 
-@media only screen and (max-width:1023px) {
+@media only screen and (max-width:1024px) {
 
   body {
     flex-direction: column;
   }
 
-  .header {
-    font-size: 3.5em;
-  }
-
-  .side-panel {
-    width: 100vw;
-    height: auto;
-    justify-content: space-evenly;
-  }
-
-  .turn {
-    width: 350px;
-    font-size: 2em;
-    margin: 10px;
-    padding: 6px 0;
-    border: 2px solid var(--text-color);
-  }
-
-  .button {
-    font-size: 2em;
-    width: 350px;
-    padding: 6px;
-    cursor: pointer;
-  }
-
-  .button:hover {
-    transform: none;
+  .control-container {
+    flex-direction: row;
   }
 
   .game-container {
-    height: 1150px;
     flex-direction: column;
-  }
-
-  .board {
-    width: 868px;
-    height: 868px;
-  }
-
-  .cell {
-    width: 106px;
-    height: 106px;
-    font-size: 80px;
   }
 
   .box {
@@ -290,11 +253,5 @@ body {
 
   .box:first-child {
     margin: 0 0 35px 0;
-  }
-
-  .sub-box {
-    height: 53px;
-    width: 50px;
-    font-size: 45px;
   }
 }
