@@ -73,6 +73,8 @@ function startGame() {
   document.querySelector('#hints').addEventListener('click', hints)
 
   turnManager('b')
+
+  console.log(window)
 }
 
 //Puts the pieces on the board
@@ -102,6 +104,9 @@ function generateBoard() {
     }
   }
   const boardNode = document.getElementsByClassName('board')[0]
+
+  setBoardSize(boardNode)
+
   board.cells.reduce(cellsToNodes, boardNode)
 }
 
@@ -114,8 +119,30 @@ function cellsToNodes(boardNode, cell) {
 
   node.addEventListener('click', highlight)
 
+  const str = boardNode.style.width
+  const boardSize = Number(str.substring(0, str.length - 2))
+
+  node.style.width = `${(boardSize - 20) / 8}px`
+  node.style.height = `${(boardSize - 20) / 8}px`
+  node.style.fontSize = `${(boardSize - 20) / 8 - 20}px`
+
   boardNode.appendChild(node)
   return boardNode;
+}
+
+//Sizes board to suit window size
+function setBoardSize(boardNode) {
+  const windowWidth = window.innerWidth
+  const windowHeight = window.innerHeight
+  const orientation = windowWidth > windowHeight ? 'horizontal' : 'vertical'
+
+  if (orientation === "horizontal") {
+    boardNode.style.width = windowHeight - 120 + 'px'
+    boardNode.style.height = windowHeight - 120 + 'px'
+  } else {
+    boardNode.style.width = windowWidth - 80 + 'px'
+    boardNode.style.height = windowWidth - 80 + 'px'
+  }
 }
 
 function turnManager(colour) {
@@ -169,17 +196,17 @@ function showCheckModal(colour) {
     modal.style.color = 'var(--white-square)'
     modal.style.border = '3px solid var(--white-square)'
     setTimeout(disappear, 900)
-  
+
     function disappear() {
       const modal = document.querySelector('.modal-check')
       modal.style.display = "none"
     }
-    
+
   } else {
     const modal = document.querySelector('.modal-check')
     modal.style.display = "block"
     setTimeout(disappear, 900)
-  
+
     function disappear() {
       const modal = document.querySelector('.modal-check')
       modal.style.display = "none"
