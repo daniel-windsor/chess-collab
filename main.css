@@ -179,9 +179,9 @@ body {
   font-family: 'Parisienne';
   font-weight: bold;
   padding: 10px 30px 0 30px;
-  background-color: var(--black-square);
-  color: var(--white-square);
-  border: 3px solid var(--white-square);
+  background-color: var(--white-square);
+  color: var(--black-square);
+  border: 3px solid var(--black-square);
   border-radius: 10px;
 }
 
