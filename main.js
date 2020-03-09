@@ -194,7 +194,7 @@ function winCondition() {
     whiteCheck.forEach(el => {
       el.parentNode.classList.add('checked')
     })
-    showCheckModal()
+    showCheckModal('black')
     checkForCheckMate(blackKing, blackPieces, whiteCheck)
   }
 
@@ -203,19 +203,35 @@ function winCondition() {
     whiteCheck.forEach(el => {
       el.parentNode.classList.add('checked')
     })
-    showCheckModal()
+    showCheckModal('white')
     checkForCheckMate(whiteKing, whitePieces, blackCheck)
   }
 }
 
-function showCheckModal() {
-  const modal = document.querySelector('.modal-check')
-  modal.style.display = "block"
-  setTimeout(disappear, 900)
+function showCheckModal(colour) {
 
-  function disappear() {
+  if (colour == 'white') {
     const modal = document.querySelector('.modal-check')
-    modal.style.display = "none"
+    modal.style.display = "block"
+    modal.style.backgroundColor = 'var(--black-square)'
+    modal.style.color = 'var(--white-square)'
+    modal.style.border = '3px solid var(--white-square)'
+    setTimeout(disappear, 900)
+  
+    function disappear() {
+      const modal = document.querySelector('.modal-check')
+      modal.style.display = "none"
+    }
+    
+  } else {
+    const modal = document.querySelector('.modal-check')
+    modal.style.display = "block"
+    setTimeout(disappear, 900)
+  
+    function disappear() {
+      const modal = document.querySelector('.modal-check')
+      modal.style.display = "none"
+    }
   }
 }
 
