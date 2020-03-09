@@ -126,8 +126,14 @@ function turnManager(colour) {
 
   if (newColour == 'w') {
     turnBox.innerHTML = 'Turn: White'
+    turnBox.style.backgroundColor = 'var(--white-square)'
+    turnBox.style.color = 'rgb(32, 45, 48)'
+    turnBox.style.border = '2px solid rgb(32, 45, 48)'
   } else {
     turnBox.innerHTML = 'Turn: Black'
+    turnBox.style.backgroundColor = 'var(--black-square)'
+    turnBox.style.color = 'var(--text-color)'
+    turnBox.style.border = '2px solid var(--text-color)'
   }
 
   //Changes which pieces can be selected
@@ -152,6 +158,17 @@ function hints(evt) {
       cells[i].style.border = ""
     }
     evt.target.innerHTML = "Hints: Enabled"
+  }
+}
+
+function showCheckModal() {
+  const modal = document.querySelector('.modal-check')
+  modal.style.display = "block"
+  setTimeout(disappear, 900)
+
+  function disappear() {
+    const modal = document.querySelector('.modal-check')
+    modal.style.display = "none"
   }
 }
 
