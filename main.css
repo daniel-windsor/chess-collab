@@ -55,6 +55,12 @@ body {
   border-radius: 10px;
 }
 
+.control-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .button {
   width: 250px;
   font-size: 1.5em;
@@ -170,8 +176,6 @@ body {
   cursor: pointer;
 }
 
-
-
 .modal-check {
   display: none;
   position: absolute;
@@ -185,11 +189,7 @@ body {
   border-radius: 10px;
 }
 
-@media only screen and (min-width:800px) and (max-width:1285px) {
-
-  body {
-    flex-direction: column;
-  }
+@media only screen and (max-width:1280px) {
 
   .side-panel {
     flex-direction: column;
@@ -208,20 +208,6 @@ body {
     font-size: 1em;
   }
 
-  .button {
-    width: 200px;
-    font-size: 1em;
-    transition: none;
-  }
-
-  .button:hover {
-    transform: none;
-  }
-
-  .game-container {
-    height: 548px;
-  }
-
   .board {
     width: 540px;
     height: 540px;
@@ -233,19 +219,15 @@ body {
     font-size: 50px;
   }
 
-  .box {
-    height: 448px;
-    width: 120px;
-    margin: 0 40px
+  .turn {
+    font-size: 1em;
+    width: 200px
   }
 
-  .sub-box {
-    height: 53px;
-    width: 50px;
-    font-size: 45px;
+  .button {
+    font-size: 1em;
+    width: 200px;
   }
-
-
 }
 
 @media only screen and (max-width:1023px) {
