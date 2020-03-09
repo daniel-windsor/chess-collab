@@ -5,25 +5,34 @@
 <head>
   <title>Chess</title>
   <link rel="stylesheet" href="main.css">
-  <link href="https://fonts.googleapis.com/css?family=Parisienne&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Parisienne&display=swap"
+    rel="stylesheet">
   <script src="./scripts/movements.js"></script>
-  <script src="./scripts/main.js"></script>
+  <script src="./scripts/util.js"></script>
+  <script src="./scripts/index.js"></script>
   <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 </head>
 
 <body>
-  <div class="h1-container">
-    <h1>Chess for the Sophisticated</h1>
+  <div class="side-panel">
+    <div class="header">
+      <h1>Chess</h1>
+      <h3>For the Sophisticated</h3>
+    </div>
+    <div class="turn">Turn: White</div>
+    <div class="control-container">
+      <button type="input" class="button" id="hints">Hints: Enabled</button>
+      <button type="input" class="button" id="reset">Reset Board</button>
+    </div>
   </div>
+
   <div class="game-container">
     <div class="box white"></div>
     <div class="board"></div>
     <div class="box black"></div>
   </div>
-  <div class="turn">Turn: White</div>
-  <div class="control-container">
-    <button type="input" class="button">Reset Board</button>
-  </div>
+
+
 </body>
 
 </html>
