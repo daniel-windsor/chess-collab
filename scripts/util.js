@@ -101,7 +101,7 @@ function winCondition() {
     whiteCheck.forEach(el => {
       el.parentNode.classList.add('checked')
     })
-    showCheckModal()
+    showCheckModal('white')
     checkForCheckMate(blackKing, blackPieces, whiteCheck)
   }
 
@@ -110,7 +110,7 @@ function winCondition() {
     whiteCheck.forEach(el => {
       el.parentNode.classList.add('checked')
     })
-    showCheckModal()
+    showCheckModal('black')
     checkForCheckMate(whiteKing, whitePieces, blackCheck)
   }
 }
