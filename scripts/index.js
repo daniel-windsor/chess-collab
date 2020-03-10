@@ -70,7 +70,7 @@ function startGame() {
   populateBoard()
 
   document.querySelector('#reset').addEventListener('click', resetBoard)
-  document.querySelector('#hints').addEventListener('click', hints)
+  document.querySelector('#hints').addEventListener('click', toggleHints)
 
   turnManager('b')
 
@@ -115,7 +115,11 @@ function cellsToNodes(boardNode, cell) {
   node.classList.add('cell')
   node.classList.add(`c${cell.row}x${cell.col}`)
 
-  cell.color == "white" ? node.classList.add('white') : node.classList.add('black')
+  if (cell.color === "white") {
+    node.classList.add('white')
+  } else {
+    node.classList.add('black')
+  }
 
   node.addEventListener('click', highlight)
 
@@ -153,14 +157,10 @@ function turnManager(colour) {
 
   if (newColour == 'w') {
     turnBox.innerHTML = 'Turn: White'
-    turnBox.style.backgroundColor = 'var(--white-square)'
-    turnBox.style.color = 'rgb(32, 45, 48)'
-    turnBox.style.border = '2px solid rgb(32, 45, 48)'
+    turnBox.classList.replace('black', 'white')
   } else {
     turnBox.innerHTML = 'Turn: Black'
-    turnBox.style.backgroundColor = 'var(--black-square)'
-    turnBox.style.color = 'var(--text-color)'
-    turnBox.style.border = '2px solid var(--text-color)'
+    turnBox.classList.replace('white', 'black')
   }
 
   //Changes which pieces can be selected
@@ -173,11 +173,11 @@ function turnManager(colour) {
   })
 }
 
-function hints(evt) {
+function toggleHints(evt) {
   const cells = document.querySelectorAll('.cell')
   if (evt.target.innerHTML === "Hints: Enabled") {
     for (let i = 0; i < cells.length; i++) {
-      cells[i].style.border = "3px solid #B4AE87"
+      cells[i].style.border = "3px solid var(--text-color)"
     }
     evt.target.innerHTML = "Hints: Disabled"
   } else {
@@ -189,29 +189,22 @@ function hints(evt) {
 }
 
 function showCheckModal(colour) {
-  if (colour == 'black') {
-    const modal = document.querySelector('.modal-check')
+  const modal = document.querySelector('.modal-check')
+  console.log(colour)
+  if (colour == 'white') {
+    modal.classList.replace('black', 'white')
     modal.style.display = "block"
-    modal.style.backgroundColor = 'var(--black-square)'
-    modal.style.color = 'var(--white-square)'
-    modal.style.border = '3px solid var(--white-square)'
-    setTimeout(disappear, 900)
-
-    function disappear() {
-      const modal = document.querySelector('.modal-check')
-      modal.style.display = "none"
-    }
-
+    setTimeout(hideCheckModal, 1000)
   } else {
-    const modal = document.querySelector('.modal-check')
+    modal.classList.replace('white', 'black')
     modal.style.display = "block"
-    setTimeout(disappear, 900)
-
-    function disappear() {
-      const modal = document.querySelector('.modal-check')
-      modal.style.display = "none"
-    }
+    setTimeout(hideCheckModal, 1000)
   }
+}
+
+function hideCheckModal() {
+  const modal = document.querySelector('.modal-check')
+  modal.style.display = "none"
 }
 
 function resetBoard() {

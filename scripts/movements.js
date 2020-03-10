@@ -173,7 +173,7 @@ function filterMaxMoves(arr, colour) {
     let index = moves[move].findIndex(el => document.querySelector(el).children[0]) //Finds index of first cell with a child
 
     if (index != -1) {
-      let childColour = document.querySelector(moves[move][index]).children[0].classList.contains('w') ? 'w' : 'b'
+      let childColour = getColour(document.querySelector(moves[move][index]).children[0])
       if (childColour != colour) {
         finalArray.push(...moves[move].slice(0, index + 1))
       } else {
