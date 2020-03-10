@@ -109,7 +109,7 @@ function winCondition() {
 
   if (blackCheck[0] != null) { //If white king is checked
     whiteKing.classList.add('checked')
-    whiteCheck.forEach(el => {
+    blackCheck.forEach(el => {
       el.parentNode.classList.add('checked')
     })
     showCheckModal('black', "Check!", 1000)
@@ -135,7 +135,7 @@ function endGame(colour) {
   showCheckModal(winner, `${winner} wins!`, 2500)
 
   aiStatus = false
-  
+
   setTimeout(resetBoard, 2500)
 }
 

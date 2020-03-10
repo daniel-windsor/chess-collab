@@ -26,8 +26,8 @@ function takeTurn() {
   moves = getMoves(piece)
 
   setTimeout(function () {
-    adjustMoveProbability(moves)}
-    , 1000)
+    adjustMoveProbability(moves)
+  }, 1000)
 }
 
 //If the selected piece can capture an enemy, increase the chances of it doing so
@@ -35,12 +35,19 @@ function adjustMoveProbability(moves) {
   const probableMoves = []
   for (let i = 0; i < moves.length; i++) {
     if (document.querySelector(moves[i]).children[0]) {
-      probableMoves.push(moves[i], moves[i], moves[i])
+      const name = document.querySelector(moves[i]).children[0].classList[1].split('-')[2]
+
+      let j = pieces[name].value
+      while (j > 0) {
+        probableMoves.push(moves[i])
+        j--
+      }
+
     } else {
       probableMoves.push(moves[i])
     }
   }
-  console.log(probableMoves)
+
   movePiece(probableMoves[getRandomNum(probableMoves.length)])
 }
 
