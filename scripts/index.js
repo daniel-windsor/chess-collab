@@ -188,11 +188,13 @@ function toggleHints(evt) {
       cells[i].style.border = "3px solid var(--text-color)"
     }
     evt.target.innerHTML = "Hints: Disabled"
+    evt.target.classList.replace('white', 'black')
   } else {
     for (let i = 0; i < cells.length; i++) {
       cells[i].style.border = ""
     }
     evt.target.innerHTML = "Hints: Enabled"
+    evt.target.classList.replace('black', 'white')
   }
 }
 
