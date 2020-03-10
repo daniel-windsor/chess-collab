@@ -103,7 +103,19 @@ body {
 }
 
 .fas {
+  cursor: pointer;
   transition: transform 0.2s ease;
+  
+}
+
+.fas.white {
+  color: var(--white-piece);
+  background-color: rgba(0, 0, 0, 0)
+}
+
+.fas.black {
+  color: var(--black-piece);
+  background-color: rgba(0, 0, 0, 0)
 }
 
 .fas:hover {
@@ -159,16 +171,6 @@ body {
 .black {
   background-color: var(--black-square);
   color: var(--white-square)
-}
-
-.w {
-  color: var(--white-piece);
-  cursor: pointer;
-}
-
-.b {
-  color: var(--black-piece);
-  cursor: pointer;
 }
 
 .modal-check {

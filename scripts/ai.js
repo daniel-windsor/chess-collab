@@ -1,15 +1,15 @@
 let aiStatus = false
 
-function toggleAI(evt) {
+function toggleAI() {
   const aiButton = document.querySelector('#ai')
 
-  if (evt.target.innerHTML === "AI: Disabled") {
+  if (aiButton.innerHTML === "AI: Disabled") {
     aiStatus = true;
-    evt.target.innerHTML = "AI: Enabled"
+    aiButton.innerHTML = "AI: Enabled"
     aiButton.classList.replace('black', 'white')
   } else {
     aiStatus = false;
-    evt.target.innerHTML = "AI: Disabled"
+    aiButton.innerHTML = "AI: Disabled"
     aiButton.classList.replace('white', 'black')
   }
 }
@@ -17,12 +17,12 @@ function toggleAI(evt) {
 function takeTurn() {
   let piece = ""
   let moves = []
-  const king = document.querySelector('.fa-chess-king.b')
+  const king = document.querySelector('.fa-chess-king.black')
   if (king.parentNode.classList.contains('checked') && getMoves(king).length > 0) {
     piece = king
   } else {
     const board = document.querySelector('.board')
-    const pieces = [...board.querySelectorAll('.b')].filter(el => getMoves(el).length > 0)
+    const pieces = [...board.querySelectorAll('.fas.black')].filter(el => getMoves(el).length > 0)
     piece = pieces[getRandomNum(pieces.length)]
   }
 

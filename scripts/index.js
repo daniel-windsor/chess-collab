@@ -5,66 +5,66 @@ const pieces = {
   pawn: {
     white: {
       starting: [".c6x0", ".c6x1", ".c6x2", ".c6x3", ".c6x4", ".c6x5", ".c6x6", ".c6x7"],
-      icon: '<i class="fas fa-chess-pawn w" draggable="true"</i>'
+      icon: '<i class="fas fa-chess-pawn white"</i>'
     },
     black: {
       starting: [".c1x0", ".c1x1", ".c1x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
-      icon: '<i class="fas fa-chess-pawn b"</i>'
+      icon: '<i class="fas fa-chess-pawn black"</i>'
     },
     value: 2
   },
   rook: {
     white: {
       starting: [".c7x0", ".c7x7"],
-      icon: '<i class="fas fa-chess-rook w"></i>'
+      icon: '<i class="fas fa-chess-rook white"></i>'
     },
     black: {
       starting: [".c0x0", ".c0x7"],
-      icon: '<i class="fas fa-chess-rook b"></i>'
+      icon: '<i class="fas fa-chess-rook black"></i>'
     },
     value: 6
   },
   knight: {
     white: {
       starting: [".c7x1", ".c7x6"],
-      icon: '<i class="fas fa-chess-knight w"></i>'
+      icon: '<i class="fas fa-chess-knight white"></i>'
     },
     black: {
       starting: [".c0x1", ".c0x6"],
-      icon: '<i class="fas fa-chess-knight b"></i>'
+      icon: '<i class="fas fa-chess-knight black"></i>'
     },
     value: 4
   },
   bishop: {
     white: {
       starting: [".c7x2", ".c7x5"],
-      icon: '<i class="fas fa-chess-bishop w"></i>'
+      icon: '<i class="fas fa-chess-bishop white"></i>'
     },
     black: {
       starting: [".c0x2", ".c0x5"],
-      icon: '<i class="fas fa-chess-bishop b"></i>'
+      icon: '<i class="fas fa-chess-bishop black"></i>'
     },
     value: 4
   },
   queen: {
     white: {
       starting: [".c7x3"],
-      icon: '<i class="fas fa-chess-queen w"></i>'
+      icon: '<i class="fas fa-chess-queen white"></i>'
     },
     black: {
-      starting: [".c0x4"],
-      icon: '<i class="fas fa-chess-queen b"></i>'
+      starting: [".c0x3"],
+      icon: '<i class="fas fa-chess-queen black"></i>'
     },
     value: 10
   },
   king: {
     white: {
       starting: [".c7x4"],
-      icon: '<i class="fas fa-chess-king w"></i>'
+      icon: '<i class="fas fa-chess-king white"></i>'
     },
     black: {
-      starting: [".c0x3"],
-      icon: '<i class="fas fa-chess-king b"></i>'
+      starting: [".c0x4"],
+      icon: '<i class="fas fa-chess-king black"></i>'
     },
     value: 20
   }
@@ -79,7 +79,7 @@ function startGame() {
   document.querySelector('#hints').addEventListener('click', toggleHints)
   document.querySelector('#ai').addEventListener('click', toggleAI)
 
-  turnManager('b')
+  turnManager('black')
 }
 
 //Puts the pieces on the board
@@ -154,12 +154,12 @@ function setBoardSize(boardNode) {
 }
 
 function turnManager(colour) {
-  const newColour = colour == 'w' ? 'b' : 'w'
+  const newColour = getEnemyColour(colour)
 
   //displays turn on UI
   const turnBox = document.querySelector('.turn')
 
-  if (newColour == 'w') {
+  if (newColour == 'white') {
     turnBox.innerHTML = 'Turn: White'
     turnBox.classList.replace('black', 'white')
   } else {
@@ -172,11 +172,11 @@ function turnManager(colour) {
     el.classList.remove('non-interactive');
   })
 
-  document.querySelectorAll(`.${colour}`).forEach(el => {
+  document.querySelectorAll(`.fas.${colour}`).forEach(el => {
     el.classList.add('non-interactive');
   })
 
-  if (aiStatus && newColour === 'b') {
+  if (aiStatus && newColour === 'black') {
     setTimeout(takeTurn, 1000)
   }
 }
@@ -237,5 +237,5 @@ function resetBoard() {
 
   populateBoard()
 
-  turnManager('b')
+  turnManager('black')
 }

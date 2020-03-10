@@ -47,13 +47,13 @@ function pawnMoves(row, col, colour) {
     return arr
   }
 
-  let direction = colour == "w" ? -1 : 1 //find direction pawn needs to move in based on colour
+  let direction = colour == "white" ? -1 : 1 //find direction pawn needs to move in based on colour
 
   if (!document.querySelector(`.c${row+direction}x${col}`).children[0]) {
     arr.push(`.c${row+direction}x${col}`)
   }
 
-  if ((colour == "w" && row == 6) || (colour == "b" && row == 1)) {
+  if ((colour == "white" && row == 6) || (colour == "black" && row == 1)) {
     if (!document.querySelector(`.c${row+direction*2}x${col}`).children[0] && !document.querySelector(`.c${row+direction}x${col}`).children[0]) {
       arr.push(`.c${row+(direction*2)}x${col}`)
     }

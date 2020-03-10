@@ -5,7 +5,7 @@ function highlight(evt) {
   }
 
   let cell = evt.target.parentNode //stores selected cell on which highlights/possible moves is based
-  if (cell.tagName === "i") {
+  if (cell.tagName === "I") {
     cell = evt.target.parentNode
   }
 
@@ -40,8 +40,8 @@ function removeHighlight() {
 
 //Move capture piece to side box
 function capturePiece(cell) {
-
-  const colour = cell.children[0].classList.contains('w') ? 'white' : 'black' //get type and colour of piece
+  const colour = getColour(cell.children[0])
+  // const colour = cell.children[0].classList.contains('white') ? 'white' : 'black' //get type and colour of piece
 
   const box = document.querySelector(`.box.${colour}`)
   const node = document.createElement('div')
@@ -60,13 +60,13 @@ function capturePiece(cell) {
 //promote pawn
 function promoteMe(destinationCell) {
   const colour = getColour(destinationCell.firstChild)
-  const colourLong = colour == 'w' ? 'white' : 'black'
+  // const colourLong = colour == 'w' ? 'white' : 'black'
 
   const cellCoord = destinationCell.className.split(' ')[1].split('')
   const row = Number(cellCoord[1])
 
   if (row == 0 || row == 7) {
-    const pieces = document.querySelectorAll(`.${colourLong} .sub-box`)
+    const pieces = document.querySelectorAll(`.${colour} .sub-box`)
 
     pieces.forEach(function (el) {
       el.classList.add('highlight')
@@ -89,12 +89,12 @@ function winCondition() {
     document.querySelector('.checked').classList.remove('checked')
   }
 
-  const whiteKing = document.querySelector('.fa-chess-king.w').parentNode
-  const blackKing = document.querySelector('.fa-chess-king.b').parentNode
+  const whiteKing = document.querySelector('.fa-chess-king.white').parentNode
+  const blackKing = document.querySelector('.fa-chess-king.black').parentNode
 
   const board = document.querySelector('.board')
-  const whitePieces = [...board.querySelectorAll('.w')]
-  const blackPieces = [...board.querySelectorAll('.b')]
+  const whitePieces = [...board.querySelectorAll('.fas.white')]
+  const blackPieces = [...board.querySelectorAll('fas.black')]
 
   const whiteCheck = checkForCheck(whitePieces, blackKing)
   const blackCheck = checkForCheck(blackPieces, whiteKing)
@@ -130,15 +130,19 @@ function checkForCheck(pieces, king) {
 }
 
 function endGame(colour) {
-  winner = colour == "white" ? "black" : "white"
+  winner = getEnemyColour(colour)
   document.querySelector('.turn').innerHTML = "Game Over"
   showCheckModal(winner, `${winner} wins!`, 2500)
 
-  aiStatus = false
+  toggleAI()
 
   setTimeout(resetBoard, 2500)
 }
 
 function getColour(piece) {
-  return colour = piece.classList.contains('w') ? 'w' : 'b'
+  return colour = piece.classList.contains('white') ? 'white' : 'black'
+}
+
+function getEnemyColour(col) {
+  return colour = col == 'white' ? 'black' : 'white'
 }
