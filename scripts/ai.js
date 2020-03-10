@@ -14,7 +14,7 @@ function takeTurn() {
   let piece = ""
   let moves = []
   const king = document.querySelector('.fa-chess-king.b')
-  if (king.parentNode.classList.contains('checked')) {
+  if (king.parentNode.classList.contains('checked') && getMoves(king).length > 0) {
     piece = king
   } else {
     const board = document.querySelector('.board')
@@ -30,6 +30,7 @@ function takeTurn() {
     , 1000)
 }
 
+//If the selected piece can capture an enemy, increase the chances of it doing so
 function adjustMoveProbability(moves) {
   const probableMoves = []
   for (let i = 0; i < moves.length; i++) {

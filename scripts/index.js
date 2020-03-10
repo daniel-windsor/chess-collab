@@ -170,7 +170,7 @@ function turnManager(colour) {
     el.classList.add('non-interactive');
   })
 
-  if(aiStatus && newColour === 'b') {
+  if (aiStatus && newColour === 'b') {
     setTimeout(takeTurn, 1000)
   }
 }
@@ -190,17 +190,17 @@ function toggleHints(evt) {
   }
 }
 
-function showCheckModal(colour) {
+function showCheckModal(colour, message, timeout) {
   const modal = document.querySelector('.modal-check')
+
   if (colour == 'white') {
     modal.classList.replace('black', 'white')
-    modal.style.display = "block"
-    setTimeout(hideCheckModal, 1000)
   } else {
     modal.classList.replace('white', 'black')
-    modal.style.display = "block"
-    setTimeout(hideCheckModal, 1000)
   }
+  modal.innerHTML = message
+  modal.style.display = "block"
+  setTimeout(hideCheckModal, timeout)
 }
 
 function hideCheckModal() {
