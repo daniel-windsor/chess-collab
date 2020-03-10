@@ -47,6 +47,10 @@ function capturePiece(cell) {
   const node = document.createElement('div')
   const child = cell.children[0]
 
+  if(child.classList.contains('fa-chess-king')) {
+    endGame(colour)
+  }
+
   node.classList.add('sub-box')
 
   node.appendChild(child)
@@ -68,7 +72,6 @@ function promoteMe(destinationCell) {
       el.classList.add('highlight')
 
       el.addEventListener('click', function (evt) {
-        console.log(evt.target)
         capturePiece(destinationCell)
         evt.target.remove();
         destinationCell.appendChild(evt.target.children[0])
@@ -101,17 +104,15 @@ function winCondition() {
     whiteCheck.forEach(el => {
       el.parentNode.classList.add('checked')
     })
-    showCheckModal('white')
-    checkForCheckMate(blackKing, blackPieces, whiteCheck)
+    showCheckModal('white', 'Check!', 1000)
   }
 
   if (blackCheck[0] != null) { //If white king is checked
     whiteKing.classList.add('checked')
-    whiteCheck.forEach(el => {
+    blackCheck.forEach(el => {
       el.parentNode.classList.add('checked')
     })
-    showCheckModal('black')
-    checkForCheckMate(whiteKing, whitePieces, blackCheck)
+    showCheckModal('black', "Check!", 1000)
   }
 }
 
@@ -128,15 +129,14 @@ function checkForCheck(pieces, king) {
   return checking
 }
 
-function checkForCheckMate(king, allyPieces, enemyPieces) {
-  const kingCell = king
-  enemyCells = enemyPieces.map(el => el.parentNode.classList[1])
+function endGame(colour) {
+  winner = colour == "white" ? "black" : "white"
+  document.querySelector('.turn').innerHTML = "Game Over"
+  showCheckModal(winner, `${winner} wins!`, 2500)
 
-  const kingMoves = getMoves(kingCell.firstChild)
+  aiStatus = false
 
-  const enemyMoves = enemyPieces.map(el => getMoves(el))
-  console.log(enemyMoves)
-
+  setTimeout(resetBoard, 2500)
 }
 
 function getColour(piece) {

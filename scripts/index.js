@@ -10,7 +10,8 @@ const pieces = {
     black: {
       starting: [".c1x0", ".c1x1", ".c1x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
       icon: '<i class="fas fa-chess-pawn b"</i>'
-    }
+    },
+    value: 2
   },
   rook: {
     white: {
@@ -20,7 +21,8 @@ const pieces = {
     black: {
       starting: [".c0x0", ".c0x7"],
       icon: '<i class="fas fa-chess-rook b"></i>'
-    }
+    },
+    value: 6
   },
   knight: {
     white: {
@@ -30,7 +32,8 @@ const pieces = {
     black: {
       starting: [".c0x1", ".c0x6"],
       icon: '<i class="fas fa-chess-knight b"></i>'
-    }
+    },
+    value: 4
   },
   bishop: {
     white: {
@@ -40,7 +43,8 @@ const pieces = {
     black: {
       starting: [".c0x2", ".c0x5"],
       icon: '<i class="fas fa-chess-bishop b"></i>'
-    }
+    },
+    value: 4
   },
   queen: {
     white: {
@@ -50,7 +54,8 @@ const pieces = {
     black: {
       starting: [".c0x4"],
       icon: '<i class="fas fa-chess-queen b"></i>'
-    }
+    },
+    value: 10
   },
   king: {
     white: {
@@ -60,7 +65,8 @@ const pieces = {
     black: {
       starting: [".c0x3"],
       icon: '<i class="fas fa-chess-king b"></i>'
-    }
+    },
+    value: 20
   }
 }
 
@@ -71,10 +77,9 @@ function startGame() {
 
   document.querySelector('#reset').addEventListener('click', resetBoard)
   document.querySelector('#hints').addEventListener('click', toggleHints)
+  document.querySelector('#ai').addEventListener('click', toggleAI)
 
   turnManager('b')
-
-  console.log(window)
 }
 
 //Puts the pieces on the board
@@ -138,9 +143,8 @@ function cellsToNodes(boardNode, cell) {
 function setBoardSize(boardNode) {
   const windowWidth = window.innerWidth
   const windowHeight = window.innerHeight
-  const orientation = windowWidth > windowHeight ? 'horizontal' : 'vertical'
 
-  if (orientation === "horizontal") {
+  if (windowWidth > windowHeight) {
     boardNode.style.width = windowHeight - 120 + 'px'
     boardNode.style.height = windowHeight - 120 + 'px'
   } else {
@@ -171,6 +175,10 @@ function turnManager(colour) {
   document.querySelectorAll(`.${colour}`).forEach(el => {
     el.classList.add('non-interactive');
   })
+
+  if (aiStatus && newColour === 'b') {
+    setTimeout(takeTurn, 1000)
+  }
 }
 
 function toggleHints(evt) {
@@ -188,18 +196,17 @@ function toggleHints(evt) {
   }
 }
 
-function showCheckModal(colour) {
+function showCheckModal(colour, message, timeout) {
   const modal = document.querySelector('.modal-check')
-  console.log(colour)
+
   if (colour == 'white') {
     modal.classList.replace('black', 'white')
-    modal.style.display = "block"
-    setTimeout(hideCheckModal, 1000)
   } else {
     modal.classList.replace('white', 'black')
-    modal.style.display = "block"
-    setTimeout(hideCheckModal, 1000)
   }
+  modal.innerHTML = message
+  modal.style.display = "block"
+  setTimeout(hideCheckModal, timeout)
 }
 
 function hideCheckModal() {
