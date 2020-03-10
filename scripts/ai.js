@@ -1,12 +1,16 @@
 let aiStatus = false
 
 function toggleAI(evt) {
+  const aiButton = document.querySelector('#ai')
+
   if (evt.target.innerHTML === "AI: Disabled") {
     aiStatus = true;
     evt.target.innerHTML = "AI: Enabled"
+    aiButton.classList.replace('black', 'white')
   } else {
     aiStatus = false;
     evt.target.innerHTML = "AI: Disabled"
+    aiButton.classList.replace('white', 'black')
   }
 }
 
