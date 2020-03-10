@@ -8,27 +8,39 @@ function toggleAI(evt) {
     aiStatus = false;
     evt.target.innerHTML = "AI: Disabled"
   }
-} 
-
-function takeTurn() {
-  saveKing()
-  const board = document.querySelector('.board')
-  const pieces = board.querySelectorAll('.b')
-  const piece = pieces[getRandomNum(pieces.length)]
-  const pieceMoves = getMoves(piece)
-
-  if (pieceMoves.length == 0) {
-    takeTurn()
-  } else {
-    piece.parentNode.classList.add('selected')
-    let move = pieceMoves[getRandomNum(pieceMoves.length)]
-    movePiece(move)
-  }
 }
 
-function saveKing() {
+function takeTurn() {
+  let piece = ""
+  let moves = []
   const king = document.querySelector('.fa-chess-king.b')
-  console.log(king)
+  if (king.parentNode.classList.contains('checked')) {
+    piece = king
+  } else {
+    const board = document.querySelector('.board')
+    const pieces = [...board.querySelectorAll('.b')].filter(el => getMoves(el).length > 0)
+    piece = pieces[getRandomNum(pieces.length)]
+  }
+
+  piece.parentNode.classList.add('selected')
+  moves = getMoves(piece)
+
+  setTimeout(function () {
+    adjustMoveProbability(moves)}
+    , 1000)
+}
+
+function adjustMoveProbability(moves) {
+  const probableMoves = []
+  for (let i = 0; i < moves.length; i++) {
+    if (document.querySelector(moves[i]).children[0]) {
+      probableMoves.push(moves[i], moves[i], moves[i])
+    } else {
+      probableMoves.push(moves[i])
+    }
+  }
+  console.log(probableMoves)
+  movePiece(probableMoves[getRandomNum(probableMoves.length)])
 }
 
 function getRandomNum(num) {

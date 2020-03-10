@@ -68,7 +68,6 @@ function promoteMe(destinationCell) {
       el.classList.add('highlight')
 
       el.addEventListener('click', function (evt) {
-        console.log(evt.target)
         capturePiece(destinationCell)
         evt.target.remove();
         destinationCell.appendChild(evt.target.children[0])
@@ -135,8 +134,6 @@ function checkForCheckMate(king, allyPieces, enemyPieces) {
   const kingMoves = getMoves(kingCell.firstChild)
 
   const enemyMoves = enemyPieces.map(el => getMoves(el))
-  console.log(enemyMoves)
-
 }
 
 function getColour(piece) {

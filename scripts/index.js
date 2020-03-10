@@ -192,7 +192,6 @@ function toggleHints(evt) {
 
 function showCheckModal(colour) {
   const modal = document.querySelector('.modal-check')
-  console.log(colour)
   if (colour == 'white') {
     modal.classList.replace('black', 'white')
     modal.style.display = "block"
