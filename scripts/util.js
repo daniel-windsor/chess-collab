@@ -94,7 +94,7 @@ function winCondition() {
 
   const board = document.querySelector('.board')
   const whitePieces = [...board.querySelectorAll('.fas.white')]
-  const blackPieces = [...board.querySelectorAll('fas.black')]
+  const blackPieces = [...board.querySelectorAll('.fas.black')]
 
   const whiteCheck = checkForCheck(whitePieces, blackKing)
   const blackCheck = checkForCheck(blackPieces, whiteKing)
@@ -118,14 +118,12 @@ function winCondition() {
 
 //Returns array of pieces that check the king
 function checkForCheck(pieces, king) {
-  const checking = []
-  for (let i = 0; i < pieces.length; i++) {
-    let moves = getMoves(pieces[i])
-    if (moves.includes(`.${king.classList[1]}`)) {
-      checking.push(pieces[i])
+  const checking = pieces.filter(function (el) {
+    if (getMoves(el).includes(`.${king.classList[1]}`)) {
+      return el
     }
-  }
-
+  })
+  console.log(checking)
   return checking
 }
 

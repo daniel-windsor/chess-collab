@@ -15,46 +15,73 @@ function toggleAI() {
 }
 
 function takeTurn() {
-  let piece = ""
-  let moves = []
+  let aiPiece = ""
   const king = document.querySelector('.fa-chess-king.black')
   if (king.parentNode.classList.contains('checked') && getMoves(king).length > 0) {
-    piece = king
+    aiPiece = king
   } else {
-    const board = document.querySelector('.board')
-    const pieces = [...board.querySelectorAll('.fas.black')].filter(el => getMoves(el).length > 0)
-    piece = pieces[getRandomNum(pieces.length)]
+    const aiPieces = adjustPieceProbability()
+    aiPiece = aiPieces[getRandomNum(aiPieces.length)]
+    console.log(aiPieces)
   }
 
-  piece.parentNode.classList.add('selected')
-  moves = getMoves(piece)
+  aiPiece.parentNode.classList.add('selected')
+  const moves = getMoves(aiPiece)
 
   setTimeout(function () {
     adjustMoveProbability(moves)
   }, 1000)
 }
 
-//If the selected piece can capture an enemy, increase the chances of it doing so
+//Increase chance of selecting piece in danger of being captured
+function adjustPieceProbability() {
+  const board = document.querySelector('.board')
+  const aiPieces = [...board.querySelectorAll('.fas.black')].filter(el => getMoves(el).length > 0)
+
+  const enemyPieces = [...board.querySelectorAll('.fas.white')]
+  const enemyMoves = enemyPieces.map(el => getMoves(el)).flat()
+
+  const probablePieces = []
+
+  aiPieces.forEach(function (el) {
+    if (enemyMoves.includes(`.${el.parentNode.classList[1]}`)) {
+      const name = el.classList[1].split('-')[2]
+      let i = pieces[name].value
+      while (i > 0) {
+        probablePieces.push(el)
+        i--
+      }
+    } else {
+      probablePieces.push(el)
+    }
+  })
+
+  return probablePieces
+}
+
+//Increase chance of capturing enemy piece when able
 function adjustMoveProbability(moves) {
   const probableMoves = []
-  for (let i = 0; i < moves.length; i++) {
-    if (document.querySelector(moves[i]).children[0]) {
-      const name = document.querySelector(moves[i]).children[0].classList[1].split('-')[2]
-
+  moves.forEach(function (el) {
+    if (document.querySelector(el).children[0]) {
+      const name = document.querySelector(el).children[0].classList[1].split('-')[2]
       let j = pieces[name].value
       while (j > 0) {
-        probableMoves.push(moves[i])
+        probableMoves.push(el)
         j--
       }
-
     } else {
-      probableMoves.push(moves[i])
+      probableMoves.push(el)
     }
-  }
+  })
 
   movePiece(probableMoves[getRandomNum(probableMoves.length)])
 }
 
 function getRandomNum(num) {
   return Math.floor(Math.random() * num)
+}
+
+function getName(obj) {
+  return obj.children[0].classList[1].split('-')[2]
 }

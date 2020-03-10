@@ -11,7 +11,7 @@ const pieces = {
       starting: [".c1x0", ".c1x1", ".c1x2", ".c1x3", ".c1x4", ".c1x5", ".c1x6", ".c1x7"],
       icon: '<i class="fas fa-chess-pawn black"</i>'
     },
-    value: 2
+    value: 1
   },
   rook: {
     white: {
@@ -22,7 +22,7 @@ const pieces = {
       starting: [".c0x0", ".c0x7"],
       icon: '<i class="fas fa-chess-rook black"></i>'
     },
-    value: 6
+    value: 5
   },
   knight: {
     white: {
@@ -33,7 +33,7 @@ const pieces = {
       starting: [".c0x1", ".c0x6"],
       icon: '<i class="fas fa-chess-knight black"></i>'
     },
-    value: 4
+    value: 3
   },
   bishop: {
     white: {
@@ -44,7 +44,7 @@ const pieces = {
       starting: [".c0x2", ".c0x5"],
       icon: '<i class="fas fa-chess-bishop black"></i>'
     },
-    value: 4
+    value: 3
   },
   queen: {
     white: {
@@ -55,7 +55,7 @@ const pieces = {
       starting: [".c0x3"],
       icon: '<i class="fas fa-chess-queen black"></i>'
     },
-    value: 10
+    value: 9
   },
   king: {
     white: {
