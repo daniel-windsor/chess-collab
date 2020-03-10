@@ -71,10 +71,9 @@ function startGame() {
 
   document.querySelector('#reset').addEventListener('click', resetBoard)
   document.querySelector('#hints').addEventListener('click', toggleHints)
+  document.querySelector('#ai').addEventListener('click', toggleAI)
 
   turnManager('b')
-
-  console.log(window)
 }
 
 //Puts the pieces on the board
@@ -138,9 +137,8 @@ function cellsToNodes(boardNode, cell) {
 function setBoardSize(boardNode) {
   const windowWidth = window.innerWidth
   const windowHeight = window.innerHeight
-  const orientation = windowWidth > windowHeight ? 'horizontal' : 'vertical'
 
-  if (orientation === "horizontal") {
+  if (windowWidth > windowHeight) {
     boardNode.style.width = windowHeight - 120 + 'px'
     boardNode.style.height = windowHeight - 120 + 'px'
   } else {
@@ -171,6 +169,10 @@ function turnManager(colour) {
   document.querySelectorAll(`.${colour}`).forEach(el => {
     el.classList.add('non-interactive');
   })
+
+  if(aiStatus && newColour === 'b') {
+    setTimeout(takeTurn, 1000)
+  }
 }
 
 function toggleHints(evt) {
