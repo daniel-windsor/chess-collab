@@ -123,7 +123,6 @@ function checkForCheck(pieces, king) {
       return el
     }
   })
-  console.log(checking)
   return checking
 }
 

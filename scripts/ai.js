@@ -22,7 +22,6 @@ function takeTurn() {
   } else {
     const aiPieces = adjustPieceProbability()
     aiPiece = aiPieces[getRandomNum(aiPieces.length)]
-    console.log(aiPieces)
   }
 
   aiPiece.parentNode.classList.add('selected')
