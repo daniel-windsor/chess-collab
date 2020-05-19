@@ -1,12 +1,6 @@
-# Yohan and Dan try to build Chess together
+# Yohan and Dan build Chess together
 
-### Things to do:
+This project is intended as an extention to the learning we've done as part of Enspiral Dev Academy's foundation.
 
-- [x] Add pieces
-- [x] Add ability to move pieces between divs
-- [x] On piece selection, highlight squares piece can move to
-- [x] Check for check and if move is legal
-- [] Win condition
-- [x] Reset button to reset board state
-- [] Timer?
-- [x] Area for removed pieces?
+This is chess built entirely in native JavaScript, with a not-so-intelligent ai.
+
